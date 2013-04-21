@@ -5,15 +5,19 @@ import java.io.*;
 import javax.imageio.ImageIO;
 
 public class SendAndRecv {
-	public int sendToServ (IplImage image) {
+	public int sendToServ (IplImage image, int userID) {
 		//Send image to server, return 0 if success, -1 else
-		String serverName = "192.168.1.178";
+		String serverName = "127.0.0.1";
 	    int port = 8080;
 	    try {
 		    System.out.println("Connecting to: " + serverName + "Port: " + port);
 		    Socket client = new Socket(serverName, port);
 		    System.out.println("Connected to: " + client.getRemoteSocketAddress());
-		    OutputStream outToServer = client.getOutputStream();		    
+		    OutputStream outToServer = client.getOutputStream();
+		    DataOutputStream dataOut = new DataOutputStream(client.getOutputStream());
+		    System.out.println("Attempting to send ID");
+		    dataOut.writeInt(userID);
+		    System.out.println("ID Sent");
 		    System.out.println("Attempting img send");
 		    BufferedImage buferedimg = image.getBufferedImage();
 		    ImageIO.write(buferedimg, "JPG", outToServer);
