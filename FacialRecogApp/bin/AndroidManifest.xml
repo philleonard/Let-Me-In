@@ -27,6 +27,7 @@
         
         <activity android:name=".HomeScreen"/>
         <activity android:name=".MyDoor"/>
+        <activity android:name=".MyLists"/>
     </application>
     
     

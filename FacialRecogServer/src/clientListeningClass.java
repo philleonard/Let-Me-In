@@ -16,9 +16,7 @@ import java.net.Socket;
 
 public class clientListeningClass implements Runnable {
 	private static ServerSocket listeningSocket;
-	public clientListeningClass(){
-		
-	}
+
 	public void run(){
 		   int clientport = 8080;
 		   try {

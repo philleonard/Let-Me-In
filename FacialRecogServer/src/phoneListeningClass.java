@@ -16,9 +16,7 @@ import java.net.Socket;
 
 public class phoneListeningClass implements Runnable {
 	private static ServerSocket listeningSocket;
-	public phoneListeningClass(){
-		
-	}
+
 	public void run(){
 		   int clientport = 8181;
 		   try {

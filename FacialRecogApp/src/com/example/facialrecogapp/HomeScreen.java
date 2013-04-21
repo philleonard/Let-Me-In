@@ -16,12 +16,30 @@ public class HomeScreen extends Activity {
 			setContentView(R.layout.home_page);
 			
 			Button myDoorButton = (Button) findViewById(R.id.MyDoorButton);
+			Button myListsButton = (Button) findViewById(R.id.MyListsButton);
+			Button signoutButton = (Button) findViewById(R.id.SignoutButton);
+			
+			signoutButton.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					finish();
+				}
+			});
+			
 			myDoorButton.setOnClickListener(new OnClickListener() {
 				
 				@Override
 				public void onClick(View v) {
 					startActivity(new Intent(getApplicationContext(), MyDoor.class));
-					
+				}
+			});
+			
+			myListsButton.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					startActivity(new Intent(getApplicationContext(), MyLists.class));
 				}
 			});
 		}
