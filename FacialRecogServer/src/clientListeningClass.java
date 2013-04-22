@@ -30,11 +30,13 @@ public class clientListeningClass implements Runnable {
 	        	 
 	             Thread t = new Thread(new servPCtoServ(tempSock));
 	             t.start();
-	             tempSock.close();
+	             
 	        	 
 	         }
 	         
-	      }catch(IOException e){}
+	      }catch(IOException e){
+	    	  
+	      }
 	   }
 	   
 

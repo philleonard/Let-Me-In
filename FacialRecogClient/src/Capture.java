@@ -49,7 +49,7 @@ public class Capture implements Runnable {
     					canvas.showImage(newImage);
     					
     					SendAndRecv sendImage = new SendAndRecv();
-              			//sendImage.sendToServ(newImage);
+              			sendImage.sendToServ(newImage, "username", "password");
     				}
                     
                 }

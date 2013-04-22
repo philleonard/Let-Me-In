@@ -89,13 +89,12 @@ public class sqlConnections{
 	  else {
 		 
 		  query = "SELECT password, phoneip, clientip FROM users WHERE username = " + username;
-		 
 		  try {
 			  statement = conn.createStatement();
 			  rs = statement.executeQuery(query);
 			  rs.next();
 			  if (rs.getString("password").equals(password)){
-				 result = 1;
+				 result = 0;
 				 
 				 if (identifier == 1) {
 					 if (!ipAddress.equals(rs.getString("phoneip"))){
@@ -111,16 +110,22 @@ public class sqlConnections{
 					 }
 				 }
 			  }
-		  } catch (SQLException e ) {} 
+			  else {
+				  result = 2;
+			  }
+		  } catch (SQLException e ) {
+			  result = 1;
+		  } 
 		  
 		  
 	  }//end else
+	  
 	  return result;
   }
   
   //test method
   public static void main(String[] args) throws Exception{
-	  getPicsAndIDs(12345);
+	  loginAuthentication("james", "bob", "192.168.0.1", 1);
   }
   
 }
