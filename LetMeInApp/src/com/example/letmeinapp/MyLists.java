@@ -1,4 +1,6 @@
-package com.example.facialrecogapp;
+package com.example.letmeinapp;
+
+import com.example.facialrecogapp.R;
 
 import android.app.Activity;
 import android.os.Bundle;

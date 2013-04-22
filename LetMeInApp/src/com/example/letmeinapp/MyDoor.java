@@ -1,4 +1,4 @@
-package com.example.facialrecogapp;
+package com.example.letmeinapp;
 
 import java.awt.image.BufferedImage;
 import java.io.DataInputStream;
@@ -13,6 +13,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.imageio.ImageIO;
+
+import com.example.facialrecogapp.R;
 
 import android.app.Activity;
 import android.content.Context;

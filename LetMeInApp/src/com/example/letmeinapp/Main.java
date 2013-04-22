@@ -1,4 +1,6 @@
-package com.example.facialrecogapp;
+package com.example.letmeinapp;
+
+import com.example.facialrecogapp.R;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -38,7 +40,7 @@ public class Main extends Activity {
 				String uname = username.getText().toString();
 				String pass = password.getText().toString();
 				
-				AsyncTask<Object, Object, Object> li = new Login(uname, pass, error, loginProgress, loginButton, Main.this).execute();
+				AsyncTask<Object, Object, Object> li = new Login(uname, pass, error, loginProgress, loginButton, username, password, Main.this).execute();
 				
 			}
 		});

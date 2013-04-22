@@ -1,4 +1,4 @@
-package com.example.facialrecogapp;
+package com.example.letmeinapp;
 
 import java.awt.image.BufferedImage;
 import java.io.DataInputStream;

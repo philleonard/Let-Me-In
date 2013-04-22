@@ -1,4 +1,4 @@
-package com.example.facialrecogapp;
+package com.example.letmeinapp;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -24,15 +25,19 @@ public class Login extends AsyncTask<Object, Object, Object>{
 	ProgressBar loginProgress;
 	Button loginButton;
 	Main main;
+	EditText username;
+	EditText password;
 	int cancelReason = 0;
 	
-	Login(String uname, String pass, TextView error, ProgressBar loginProgress, Button loginButton, Main main) {
+	Login(String uname, String pass, TextView error, ProgressBar loginProgress, Button loginButton, EditText username, EditText password, Main main) {
 		this.uname = uname;
 		this.pass = pass;
 		this.error = error;
 		this.main = main;
 		this.loginButton = loginButton;
 		this.loginProgress = loginProgress;
+		this.username = username;
+		this.password = password;
 	}
 	
 	@Override
@@ -128,15 +133,20 @@ public class Login extends AsyncTask<Object, Object, Object>{
 	
 	@Override
 	protected void onCancelled() {
-		System.out.println("CANCELLED");
+		System.out.println("CANCELLED: " + cancelReason);
 		loginProgress.setVisibility(View.INVISIBLE);
 		loginButton.setVisibility(View.VISIBLE);
 		if (cancelReason == 1)
 			error.setText("Connection timeout...");
-		else if (cancelReason == 7)
+		else if (cancelReason == 7) {
 			error.setText("User " + uname + " not found");
-		else if (cancelReason == 8)
+			username.setText("");
+			password.setText("");
+		}
+		else if (cancelReason == 8) {
 			error.setText("Incorrect password");
+			password.setText("");
+		}
 	}
 
 }

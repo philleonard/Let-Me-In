@@ -16,7 +16,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.example.facialrecogapp.Main"
+            android:name="com.example.letmeinapp.Main"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,9 +25,9 @@
             </intent-filter>
         </activity>
         
-        <activity android:name=".HomeScreen"/>
-        <activity android:name=".MyDoor"/>
-        <activity android:name=".MyLists"/>
+        <activity android:name="com.example.letmeinapp.HomeScreen"/>
+        <activity android:name="com.example.letmeinapp.MyDoor"/>
+        <activity android:name="com.example.letmeinapp.MyLists"/>
     </application>
     
     
