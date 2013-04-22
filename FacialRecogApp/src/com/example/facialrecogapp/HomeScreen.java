@@ -11,7 +11,7 @@ public class HomeScreen extends Activity {
 	
 		@Override
 		protected void onCreate(Bundle savedInstanceState) {
-			// TODO Auto-generated method stub
+
 			super.onCreate(savedInstanceState);
 			setContentView(R.layout.home_page);
 			
@@ -23,7 +23,7 @@ public class HomeScreen extends Activity {
 				
 				@Override
 				public void onClick(View v) {
-					finish();
+					startActivity(new Intent(getApplicationContext(), Main.class));
 				}
 			});
 			
@@ -42,6 +42,12 @@ public class HomeScreen extends Activity {
 					startActivity(new Intent(getApplicationContext(), MyLists.class));
 				}
 			});
+		}
+		
+		@Override
+		public void onBackPressed() {
+			super.onBackPressed();
+			startActivity(new Intent(getApplicationContext(), Main.class));
 		}
 		
 }

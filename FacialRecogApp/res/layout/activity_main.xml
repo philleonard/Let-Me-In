@@ -49,4 +49,21 @@
         android:layout_centerHorizontal="true"
         android:text="Remeber Login" />
 
+    <ProgressBar
+        android:id="@+id/loginProgress"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/remeber"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/failMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/usename"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="53dp"
+        android:textColor="#FF0000" />
+
 </RelativeLayout>
