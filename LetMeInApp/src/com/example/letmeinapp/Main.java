@@ -33,15 +33,22 @@ public class Main extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				loginButton.setVisibility(View.INVISIBLE);
-				loginProgress.setVisibility(View.VISIBLE);
-				error.setText("");
-				
-				String uname = username.getText().toString();
-				String pass = password.getText().toString();
-				
-				AsyncTask<Object, Object, Object> li = new Login(uname, pass, error, loginProgress, loginButton, username, password, Main.this).execute();
-				
+				if (username.getText().toString().equals("") && password.getText().toString().equals(""))
+					error.setText("Please enter a username and password");
+				else if (username.getText().toString().equals(""))
+					error.setText("Please enter a username");
+				else if (password.getText().toString().equals(""))
+					error.setText("Please enter your password");
+				else {
+					loginButton.setVisibility(View.INVISIBLE);
+					loginProgress.setVisibility(View.VISIBLE);
+					error.setText("");
+					
+					String uname = username.getText().toString();
+					String pass = password.getText().toString();
+					
+					AsyncTask<Object, Object, Object> li = new Login(uname, pass, error, loginProgress, loginButton, username, password, Main.this).execute();
+				}
 			}
 		});
 	}	
