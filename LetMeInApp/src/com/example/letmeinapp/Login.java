@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 public class Login extends AsyncTask<Object, Object, Object>{
 	
+	final int LOGIN = 0;
 	String uname;
 	String pass;
 	TextView error;
@@ -63,6 +64,7 @@ public class Login extends AsyncTask<Object, Object, Object>{
 		DataOutputStream out;
 		try {
 			out = new DataOutputStream(client.getOutputStream());
+			out.writeInt(LOGIN);
 			out.writeUTF(uname);
 			out.writeUTF(pass);
 		} catch (IOException e) {

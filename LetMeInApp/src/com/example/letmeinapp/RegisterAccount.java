@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 public class RegisterAccount extends AsyncTask<Object, Object, Object> {
 	
+	final int REGISTER = 1;
 	int cancelReason = 0;
 	int signupResponse = 0;
 	String newUsername, password, passwordConfirm, emailAddress;
@@ -60,6 +61,7 @@ public class RegisterAccount extends AsyncTask<Object, Object, Object> {
 		DataOutputStream out;
 		try {
 			out = new DataOutputStream(client.getOutputStream());
+			out.writeInt(REGISTER);
 			out.writeUTF(newUsername);
 			out.writeUTF(password);
 			out.writeUTF(emailAddress);

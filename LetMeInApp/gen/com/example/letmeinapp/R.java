@@ -45,10 +45,10 @@ public final class R {
         public static final int signUpButton=0x7f080006;
         public static final int signUpErrorText=0x7f080014;
         public static final int signupload=0x7f080015;
-        public static final int textView1=0x7f080017;
-        public static final int textView2=0x7f080018;
-        public static final int textView3=0x7f080019;
-        public static final int textView4=0x7f080016;
+        public static final int textView1=0x7f080016;
+        public static final int textView2=0x7f080017;
+        public static final int textView3=0x7f080018;
+        public static final int textView4=0x7f080019;
         public static final int timeouttext=0x7f08000e;
         public static final int username=0x7f080001;
         public static final int webcamImage=0x7f08000c;
