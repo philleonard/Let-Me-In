@@ -5,6 +5,7 @@ import java.util.List;
 public class sqlConnections{
 	private static Statement statement = null;
 	private static ResultSet rs = null;
+	private static PreparedStatement ps = null;
 	
 	private static Connection connect(){
 		System.out.println("MySQL Connect Example.");
@@ -38,6 +39,9 @@ public class sqlConnections{
 
 			if (connect != null) {
 				connect.close();
+			}
+			if (ps != null){
+				ps.close();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -82,39 +86,55 @@ public class sqlConnections{
 	  //identify 0 = client, 1 = phone
 	  Connection conn = connect();
 	  String query;
-	  int result = 0;
+	  int result = 1;
 	  if (conn == null) {
 		  System.out.println("NULL");
 	  }
 	  else {
 		 
-		  query = "SELECT password, phoneip, clientip FROM users WHERE username = " + username;
+		  query = "SELECT password, phoneip, clientip FROM users WHERE username = \"" + username + "\"";
 		  try {
 			  statement = conn.createStatement();
-			  rs = statement.executeQuery(query);
-			  rs.next();
-			  if (rs.getString("password").equals(password)){
-				 result = 0;
-				 
-				 if (identifier == 1) {
-					 if (!ipAddress.equals(rs.getString("phoneip"))){
-						 query = "UPDATE users SET phoneip = " + ipAddress + " WHERE username = " + username;
-						 rs = statement.executeQuery(query);
+			  rs = statement.executeQuery(query);			  
+			  if(rs.next()){
+				  if (rs.getString("password").equals(password)){
+					 result = 0;
+					 
+					 if (identifier == 1) {
+						 if (!ipAddress.equals(rs.getString("phoneip"))){
+							 
+							 ps = conn.prepareStatement("UPDATE users SET phoneip = ? WHERE username = ?");
+							 ps.setString(1, ipAddress);
+						     ps.setString(2, username);
+						     ps.addBatch();
+						     ps.executeBatch();
+							 
+						 }
 					 }
-				 }
-				 
-				 else {
-					 if (!ipAddress.equals(rs.getString("clientip"))){
-						 query = "UPDATE users SET clientip = " + ipAddress + " WHERE username = " + username;
-						 rs = statement.executeQuery(query);
+					 
+					 else {
+						 if (!ipAddress.equals(rs.getString("clientip"))){
+							 
+							 ps = conn.prepareStatement("UPDATE users SET clientip = ? WHERE username = ?");
+							 ps.setString(1, ipAddress);
+						     ps.setString(2, username);
+						     ps.addBatch();
+						     ps.executeBatch();
+						     
+						 }
 					 }
-				 }
-			  }
+				  }//endif password check
+				  else {
+					  result = 2;
+					  System.out.println("Esle result 2");
+	
+				  }
+			  }//endif rs.next
 			  else {
-				  result = 2;
+				  result = 1;
 			  }
 		  } catch (SQLException e ) {
-			  result = 1;
+			  e.printStackTrace();
 		  } 
 		  
 		  
@@ -123,9 +143,71 @@ public class sqlConnections{
 	  return result;
   }
   
+  public static int signUp (String username, String password, String emailAddress){
+	  Connection conn = connect();
+	  String query;
+	  String query2;
+	  int result = -1;
+	  if (conn == null) {
+		  System.out.println("NULL");
+	  }
+	  else {
+		  query = "SELECT * FROM users WHERE username = \"" + username + "\"";
+		  try {
+			  statement = conn.createStatement();
+			  rs = statement.executeQuery(query);			  
+			  if(rs.next()){
+				 System.out.println("Username Exists");
+				 result = 1;
+			  }
+			  
+			  query = "SELECT * FROM users WHERE email = \"" + emailAddress + "\"";
+			  rs=statement.executeQuery(query);
+			  
+			  if(rs.next()){
+				 if (result==1){
+					 System.out.println("Username and Email Exists");
+					 result = 3;
+				 }
+				 else{
+					 System.out.println("Email Exists");
+					 result = 2; 
+				 }
+			  }
+			  
+			  else {
+				  if (result == 1){
+					  System.out.println("Username Exists");
+				  }
+				  else {
+					  System.out.println("Adding new user");
+					  result = 0;
+					  
+					  ps = conn.prepareStatement("INSERT into users (username, password, email) VALUES (?, ?, ?)");
+					  ps.setString(1, username);
+					  ps.setString(2, password);
+					  ps.setString(3, emailAddress);
+					  ps.addBatch();
+					  ps.executeBatch();
+					  System.out.println("User Added");
+					  
+				  }
+			  }
+		  } catch (SQLException e ) {
+			  e.printStackTrace();
+		  } 
+		  
+		  
+	  }//end else
+	  return 0;
+  }
+  
+  
+  
   //test method
   public static void main(String[] args) throws Exception{
-	  loginAuthentication("james", "bob", "192.168.0.1", 1);
+	  //signUp("james", "bob", "tit");
+	  //loginAuthentication("jamestrever", "password", "ipAddress", 0);
   }
   
 }
