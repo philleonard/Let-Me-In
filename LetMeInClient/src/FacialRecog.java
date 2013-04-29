@@ -10,7 +10,7 @@ public class FacialRecog {
 	
 	static FrameGrabber grab = new VideoInputFrameGrabber(0);
 	
-	public static void main(String[] args) throws InterruptedException, Exception {
+	public static void facialRecog() throws InterruptedException, Exception {
 		//Camera takes photos constantly, if face is detected then 
 		grab.start();
 		
