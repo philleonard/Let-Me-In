@@ -1,0 +1,4 @@
+return 0: Success
+return 1: username in use
+return 2: email in use
+return 3: both

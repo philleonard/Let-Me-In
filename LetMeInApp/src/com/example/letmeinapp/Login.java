@@ -4,11 +4,9 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketAddress;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.view.View;
@@ -24,12 +22,13 @@ public class Login extends AsyncTask<Object, Object, Object>{
 	TextView error;
 	ProgressBar loginProgress;
 	Button loginButton;
+	Button signUpButton;
 	Main main;
 	EditText username;
 	EditText password;
 	int cancelReason = 0;
 	
-	Login(String uname, String pass, TextView error, ProgressBar loginProgress, Button loginButton, EditText username, EditText password, Main main) {
+	Login(String uname, String pass, TextView error, ProgressBar loginProgress, Button loginButton, EditText username, EditText password, Button signUpButton, Main main) {
 		this.uname = uname;
 		this.pass = pass;
 		this.error = error;
@@ -38,6 +37,7 @@ public class Login extends AsyncTask<Object, Object, Object>{
 		this.loginProgress = loginProgress;
 		this.username = username;
 		this.password = password;
+		this.signUpButton = signUpButton;
 	}
 	
 	@Override
@@ -71,26 +71,9 @@ public class Login extends AsyncTask<Object, Object, Object>{
 			cancel(isCancelled());
 		}
 		
-		ServerSocket responseServSocket = null;
-		Socket responseSocket = null;
-		try {
-			responseServSocket = new ServerSocket(8080);
-		} catch (IOException e1) {
-			cancelReason = 3;
-			e1.printStackTrace();
-			cancel(isCancelled());
-		}
-		
-		try {
-			responseSocket = responseServSocket.accept();
-		} catch (IOException e1) {
-			cancelReason = 4;
-			e1.printStackTrace();
-			cancel(isCancelled());
-		}
 		DataInputStream in = null;
 		try {
-			in = new DataInputStream(responseSocket.getInputStream());
+			in = new DataInputStream(client.getInputStream());
 		} catch (Exception e) {
 			e.printStackTrace();
 			cancelReason = 5;
@@ -136,6 +119,8 @@ public class Login extends AsyncTask<Object, Object, Object>{
 		System.out.println("CANCELLED: " + cancelReason);
 		loginProgress.setVisibility(View.INVISIBLE);
 		loginButton.setVisibility(View.VISIBLE);
+		signUpButton.setVisibility(View.VISIBLE);
+		
 		if (cancelReason == 1)
 			error.setText("Connection timeout...");
 		else if (cancelReason == 7) {
@@ -147,6 +132,8 @@ public class Login extends AsyncTask<Object, Object, Object>{
 			error.setText("Incorrect password");
 			password.setText("");
 		}
+		else
+			error.setText("Server ERROR");
 	}
 
 }

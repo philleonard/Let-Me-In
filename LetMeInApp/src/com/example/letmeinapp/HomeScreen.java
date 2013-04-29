@@ -1,6 +1,6 @@
 package com.example.letmeinapp;
 
-import com.example.facialrecogapp.R;
+import com.example.letmeinapp.R;
 
 import android.app.Activity;
 import android.content.Intent;
