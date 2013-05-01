@@ -122,7 +122,7 @@ public class ClientHome extends JFrame implements ActionListener, WindowListener
 		gbl_panel_3.rowWeights = new double[]{1.0, 1.0, Double.MIN_VALUE};
 		panel_3.setLayout(gbl_panel_3);
 		
-		panel_4 = new panel_4(this);
+		panel_4 = new facePanel(this, 1);
 		GridBagConstraints gbc_panel_4 = new GridBagConstraints();
 		gbc_panel_4.insets = new Insets(0, 0, 5, 5);
 		gbc_panel_4.fill = GridBagConstraints.BOTH;
@@ -130,7 +130,7 @@ public class ClientHome extends JFrame implements ActionListener, WindowListener
 		gbc_panel_4.gridy = 0;
 		panel_3.add(panel_4, gbc_panel_4);
 		
-		panel_5 = new panel_5(this);
+		panel_5 = new facePanel(this, 2);
 		GridBagConstraints gbc_panel_5 = new GridBagConstraints();
 		gbc_panel_5.insets = new Insets(0, 0, 5, 5);
 		gbc_panel_5.fill = GridBagConstraints.BOTH;
@@ -138,7 +138,7 @@ public class ClientHome extends JFrame implements ActionListener, WindowListener
 		gbc_panel_5.gridy = 0;
 		panel_3.add(panel_5, gbc_panel_5);
 		
-		panel_6 = new panel_6(this);
+		panel_6 = new facePanel(this, 3);
 		GridBagConstraints gbc_panel_6 = new GridBagConstraints();
 		gbc_panel_6.insets = new Insets(0, 0, 5, 0);
 		gbc_panel_6.fill = GridBagConstraints.BOTH;
@@ -146,7 +146,7 @@ public class ClientHome extends JFrame implements ActionListener, WindowListener
 		gbc_panel_6.gridy = 0;
 		panel_3.add(panel_6, gbc_panel_6);
 		
-		panel_7 = new panel_7(this);
+		panel_7 = new facePanel(this, 4);
 		GridBagConstraints gbc_panel_7 = new GridBagConstraints();
 		gbc_panel_7.insets = new Insets(0, 0, 0, 5);
 		gbc_panel_7.fill = GridBagConstraints.BOTH;
@@ -154,7 +154,7 @@ public class ClientHome extends JFrame implements ActionListener, WindowListener
 		gbc_panel_7.gridy = 1;
 		panel_3.add(panel_7, gbc_panel_7);
 		
-		panel_8 = new panel_8(this);
+		panel_8 = new facePanel(this, 5);
 		GridBagConstraints gbc_panel_8 = new GridBagConstraints();
 		gbc_panel_8.insets = new Insets(0, 0, 0, 5);
 		gbc_panel_8.fill = GridBagConstraints.BOTH;
@@ -162,7 +162,7 @@ public class ClientHome extends JFrame implements ActionListener, WindowListener
 		gbc_panel_8.gridy = 1;
 		panel_3.add(panel_8, gbc_panel_8);
 		
-		panel_9 = new panel_9(this);
+		panel_9 = new facePanel(this, 6);
 		GridBagConstraints gbc_panel_9 = new GridBagConstraints();
 		gbc_panel_9.fill = GridBagConstraints.BOTH;
 		gbc_panel_9.gridx = 2;
@@ -391,13 +391,15 @@ public class ClientHome extends JFrame implements ActionListener, WindowListener
 //FIX FOLLOWING HACK TO IMPLEMET INHERITANCE
 
 
-class panel_4 extends JPanel {
+class facePanel extends JPanel {
 	ClientHome clientHome;
 	BufferedImage faceImage;
+	int getfaceno;
 	
-	panel_4(ClientHome clientHome) {
+	facePanel(ClientHome clientHome, int getfaceno) {
 		this.clientHome = clientHome;
 		setVisible(true);
+		this.getfaceno = getfaceno;
 	}
 	
 	@Override
@@ -405,127 +407,19 @@ class panel_4 extends JPanel {
 		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D) g;
 		
-		faceImage = clientHome.getFace1();
-		if (faceImage != null) {
-			Image faceScaled = faceImage.getScaledInstance(this.getWidth() - 6, this.getHeight() - 6, Image.SCALE_SMOOTH);
-			g2d.drawImage(faceScaled, 3, 3, null);
-		}
-		else
-			g2d.dispose();
-	}
-}
-
-class panel_5 extends JPanel {
-	ClientHome clientHome;
-	BufferedImage faceImage;
-	
-	panel_5(ClientHome clientHome) {
-		this.clientHome = clientHome;
-		setVisible(true);
-	}
-	
-	@Override
-	public void paintComponent(Graphics g){
-		super.paintComponent(g);
-		Graphics2D g2d = (Graphics2D) g;
+		if (getfaceno == 1)
+			faceImage = clientHome.getFace1();
+		else if (getfaceno == 2)
+			faceImage = clientHome.getFace2();
+		else if (getfaceno == 3)
+			faceImage = clientHome.getFace3();
+		else if (getfaceno == 4)
+			faceImage = clientHome.getFace4();
+		else if (getfaceno == 5)
+			faceImage = clientHome.getFace5();
+		else if (getfaceno == 6)
+			faceImage = clientHome.getFace6();
 		
-		faceImage = clientHome.getFace1();
-		if (faceImage != null) {
-			Image faceScaled = faceImage.getScaledInstance(this.getWidth() - 6, this.getHeight() - 6, Image.SCALE_SMOOTH);
-			g2d.drawImage(faceScaled, 3, 3, null);
-		}
-		else
-			g2d.dispose();
-	}
-}
-
-class panel_6 extends JPanel {
-	ClientHome clientHome;
-	BufferedImage faceImage;
-	
-	panel_6(ClientHome clientHome) {
-		this.clientHome = clientHome;
-		setVisible(true);
-	}
-	
-	@Override
-	public void paintComponent(Graphics g){
-		super.paintComponent(g);
-		Graphics2D g2d = (Graphics2D) g;
-		
-		faceImage = clientHome.getFace1();
-		if (faceImage != null) {
-			Image faceScaled = faceImage.getScaledInstance(this.getWidth() - 6, this.getHeight() - 6, Image.SCALE_SMOOTH);
-			g2d.drawImage(faceScaled, 3, 3, null);
-		}
-		else
-			g2d.dispose();
-	}
-}
-
-class panel_7 extends JPanel {
-	ClientHome clientHome;
-	BufferedImage faceImage;
-	
-	panel_7(ClientHome clientHome) {
-		this.clientHome = clientHome;
-		setVisible(true);
-	}
-	
-	@Override
-	public void paintComponent(Graphics g){
-		super.paintComponent(g);
-		Graphics2D g2d = (Graphics2D) g;
-		
-		faceImage = clientHome.getFace1();
-		if (faceImage != null) {
-			Image faceScaled = faceImage.getScaledInstance(this.getWidth() - 6, this.getHeight() - 6, Image.SCALE_SMOOTH);
-			g2d.drawImage(faceScaled, 3, 3, null);
-		}
-		else
-			g2d.dispose();
-	}
-}
-
-class panel_8 extends JPanel {
-	ClientHome clientHome;
-	BufferedImage faceImage;
-	
-	panel_8(ClientHome clientHome) {
-		this.clientHome = clientHome;
-		setVisible(true);
-	}
-	
-	@Override
-	public void paintComponent(Graphics g){
-		super.paintComponent(g);
-		Graphics2D g2d = (Graphics2D) g;
-		
-		faceImage = clientHome.getFace1();
-		if (faceImage != null) {
-			Image faceScaled = faceImage.getScaledInstance(this.getWidth() - 6, this.getHeight() - 6, Image.SCALE_SMOOTH);
-			g2d.drawImage(faceScaled, 3, 3, null);
-		}
-		else
-			g2d.dispose();
-	}
-}
-
-class panel_9 extends JPanel {
-	ClientHome clientHome;
-	BufferedImage faceImage;
-	
-	panel_9(ClientHome clientHome) {
-		this.clientHome = clientHome;
-		setVisible(true);
-	}
-	
-	@Override
-	public void paintComponent(Graphics g){
-		super.paintComponent(g);
-		Graphics2D g2d = (Graphics2D) g;
-		
-		faceImage = clientHome.getFace1();
 		if (faceImage != null) {
 			Image faceScaled = faceImage.getScaledInstance(this.getWidth() - 6, this.getHeight() - 6, Image.SCALE_SMOOTH);
 			g2d.drawImage(faceScaled, 3, 3, null);
