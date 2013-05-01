@@ -2,6 +2,12 @@ import static com.googlecode.javacv.cpp.opencv_core.cvClearMemStorage;
 import static com.googlecode.javacv.cpp.opencv_core.cvLoad;
 import static com.googlecode.javacv.cpp.opencv_objdetect.CV_HAAR_DO_CANNY_PRUNING;
 import static com.googlecode.javacv.cpp.opencv_objdetect.cvHaarDetectObjects;
+
+import java.awt.GridBagConstraints;
+import java.awt.image.BufferedImage;
+
+import javax.swing.JPanel;
+
 import com.googlecode.javacv.cpp.opencv_core.IplImage;
 import static com.googlecode.javacv.cpp.opencv_core.*;
 import com.googlecode.javacv.CanvasFrame;
@@ -16,8 +22,11 @@ import com.googlecode.javacv.cpp.opencv_objdetect.CvHaarClassifierCascade;
 public class Capture implements Runnable {
     
     FrameGrabber grabber;
-    public Capture(FrameGrabber grab) {
+    ClientHome clientHome;
+    
+    public Capture(ClientHome clientHome, FrameGrabber grab) {
 		this.grabber = grab;
+		this.clientHome = clientHome;
 	}
 
 	public void run() {
@@ -25,9 +34,10 @@ public class Capture implements Runnable {
         try {
             IplImage image, newImage;
             System.out.println("FaceRecogModule: Gathering face images");
-            while (i < 4) {
+            //while (i < 4) {
             	newImage = null;
                 image = grabber.grab();
+                clientHome.resetFaces();
                 if (image != null) {
                 	CvHaarClassifierCascade cascade = new CvHaarClassifierCascade(cvLoad("res/haarcascade_frontalface_default.xml"));
     				CvMemStorage storage = CvMemStorage.create();
@@ -35,6 +45,7 @@ public class Capture implements Runnable {
     				cvClearMemStorage(storage);
     				
     				int numberFaces = sign.total();
+    		
     				for (int x = 0; x < numberFaces; x++) {
     					CvRect r = new CvRect(cvGetSeqElem(sign, x));
     					cvSetImageROI(image, r);
@@ -42,15 +53,28 @@ public class Capture implements Runnable {
     					cvCopy(image, newImage);
     					cvResetImageROI(image);
     					//display image on frame
+    					BufferedImage face = newImage.getBufferedImage();
+    					if (x == 0)
+    						clientHome.setFace1(face);
+    					if (x == 1)
+    						clientHome.setFace2(face);
+    					if (x == 2)
+    						clientHome.setFace3(face);
+    					if (x == 3)
+    						clientHome.setFace4(face);
+    					if (x == 4)
+    						clientHome.setFace5(face);
+    					if (x == 5)
+    						clientHome.setFace6(face);
     					
     					SendAndRecv sendImage = new SendAndRecv();
               			sendImage.sendToServ(newImage, "username", "password");
     				}
                     
                 }
-                Thread.sleep(500);
+                //Thread.sleep(500);
                 i++;
-            }
+            //}
         
         } catch (Exception e) {
         	System.out.println("FaceRecogModule: Capture failed");

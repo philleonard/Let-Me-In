@@ -92,23 +92,74 @@ public class ClientMain extends JFrame implements ActionListener {
 		}
 		
 		else if (action.equals("Sign Up")) {
-			String newUname = newUsername.getText();
-			String newPass = newPassword.getText();
-			String newPassConf = newPasswordConf.getText();
-			String newEmail = email.getText();
+			getSignupError().setForeground(Color.RED);
+			getSignupError().setText("");
+			String newUnameText = getNewUsername().getText();
+			String newPassText = getNewPassword().getText();
+			String newPassConfText = getNewPasswordConf().getText();
+			String newEmailText = getEmail().getText();
+			
+			if(verify(newUnameText, newPassText, newPassConfText, newEmailText)) {
+				enableComponents(false);
+				getBtnSignUp().setVisible(false);
+				getSignupProg().setVisible(true);
+				
+				Thread cs = new Thread(new ClientSignup(newUnameText, newPassText, newEmailText, this));
+				cs.start();
+			}
+			
 		}	
 	}
 	
+	private boolean verify(String newUnameText, String newPassText, String newPassConfText, String newEmailText) {
+		int emptyCount = 0;
+		boolean outcome = true;
+		if (!newPassText.equals(newPassConfText)) {
+			getSignupError().setText("Passwords don't match");
+			outcome = false;
+		}
+		
+		if (newUnameText.equals("")) {
+			getSignupError().setText("Username field empty");
+			emptyCount++;
+			System.out.println("HERE");
+			outcome = false;
+		}
+		if (newPassText.equals("")) {
+			getSignupError().setText("Password field empty");
+			emptyCount++;
+			outcome = false;
+		}
+			
+		if (newPassConfText.equals("")) {
+			getSignupError().setText("Password confirm field empty");
+			emptyCount++;
+			outcome = false;
+		}
+			
+		if (newEmailText.equals("")) {
+			getSignupError().setText("Email field empty");
+			emptyCount++;
+			outcome = false;
+		}
+			
+		if (emptyCount > 1) {
+			getSignupError().setText("Multiple fields empty");
+			outcome = false;
+		}
+		return outcome;
+	}
+
 	public void enableComponents(boolean enable) {
 		
 		username.setEditable(enable);
 		password.setEditable(enable);;
-		newUsername.setEditable(enable);;
-		newPassword.setEditable(enable);;
-		newPasswordConf.setEditable(enable);
-		email.setEditable(enable);
+		getNewUsername().setEditable(enable);;
+		getNewPassword().setEditable(enable);;
+		getNewPasswordConf().setEditable(enable);
+		getEmail().setEditable(enable);
 		getBtnLogin().setEnabled(enable);
-		btnSignUp.setEnabled(enable);
+		getBtnSignUp().setEnabled(enable);
 		
 	}
 	
@@ -131,23 +182,23 @@ public class ClientMain extends JFrame implements ActionListener {
 		password.setBounds(96, 122, 132, 20);
 		contentPane.add(password);
 		
-		newUsername = new JTextField();
-		newUsername.setBounds(415, 62, 126, 20);
-		contentPane.add(newUsername);
-		newUsername.setColumns(10);
+		setNewUsername(new JTextField());
+		getNewUsername().setBounds(415, 62, 126, 20);
+		contentPane.add(getNewUsername());
+		getNewUsername().setColumns(10);
 		
-		newPassword = new JPasswordField();
-		newPassword.setBounds(415, 93, 126, 20);
-		contentPane.add(newPassword);
+		setNewPassword(new JPasswordField());
+		getNewPassword().setBounds(415, 93, 126, 20);
+		contentPane.add(getNewPassword());
 		
-		newPasswordConf = new JPasswordField();
-		newPasswordConf.setBounds(415, 124, 126, 20);
-		contentPane.add(newPasswordConf);
+		setNewPasswordConf(new JPasswordField());
+		getNewPasswordConf().setBounds(415, 124, 126, 20);
+		contentPane.add(getNewPasswordConf());
 		
-		email = new JTextField();
-		email.setBounds(415, 155, 126, 20);
-		contentPane.add(email);
-		email.setColumns(10);
+		setEmail(new JTextField());
+		getEmail().setBounds(415, 155, 126, 20);
+		contentPane.add(getEmail());
+		getEmail().setColumns(10);
 		
 		setBtnLogin(new JButton("Login"));
 		getBtnLogin().addActionListener(this);
@@ -155,11 +206,11 @@ public class ClientMain extends JFrame implements ActionListener {
 		getBtnLogin().setBounds(81, 154, 89, 23);
 		contentPane.add(getBtnLogin());
 		
-		btnSignUp = new JButton("Sign Up");
-		btnSignUp.addActionListener(this);
-		btnSignUp.setFont(new Font("Calibri", Font.PLAIN, 13));
-		btnSignUp.setBounds(378, 184, 89, 23);
-		contentPane.add(btnSignUp);
+		setBtnSignUp(new JButton("Sign Up"));
+		getBtnSignUp().addActionListener(this);
+		getBtnSignUp().setFont(new Font("Calibri", Font.PLAIN, 13));
+		getBtnSignUp().setBounds(378, 184, 89, 23);
+		contentPane.add(getBtnSignUp());
 		
 		lblUsername = new JLabel("Username:");
 		lblUsername.setFont(new Font("Calibri", Font.PLAIN, 12));
@@ -215,12 +266,12 @@ public class ClientMain extends JFrame implements ActionListener {
 		getLoginError().setBounds(17, 188, 211, 14);
 		contentPane.add(getLoginError());
 		
-		signupError = new JLabel("");
-		signupError.setHorizontalAlignment(SwingConstants.CENTER);
-		signupError.setFont(new Font("Calibri", Font.PLAIN, 13));
-		signupError.setForeground(Color.RED);
-		signupError.setBounds(306, 218, 238, 14);
-		contentPane.add(signupError);
+		setSignupError(new JLabel(""));
+		getSignupError().setHorizontalAlignment(SwingConstants.CENTER);
+		getSignupError().setFont(new Font("Calibri", Font.PLAIN, 13));
+		getSignupError().setForeground(Color.RED);
+		getSignupError().setBounds(306, 218, 238, 14);
+		contentPane.add(getSignupError());
 		
 		setLoginProg(new JProgressBar());
 		getLoginProg().setVisible(false);
@@ -228,11 +279,11 @@ public class ClientMain extends JFrame implements ActionListener {
 		getLoginProg().setBounds(81, 161, 89, 14);
 		contentPane.add(getLoginProg());
 		
-		signupProg = new JProgressBar();
-		signupProg.setVisible(false);
-		signupProg.setIndeterminate(true);
-		signupProg.setBounds(378, 193, 89, 14);
-		contentPane.add(signupProg);
+		setSignupProg(new JProgressBar());
+		getSignupProg().setVisible(false);
+		getSignupProg().setIndeterminate(true);
+		getSignupProg().setBounds(378, 193, 89, 14);
+		contentPane.add(getSignupProg());
 	}
 
 	public JButton getBtnLogin() {
@@ -257,5 +308,61 @@ public class ClientMain extends JFrame implements ActionListener {
 
 	public void setLoginError(JLabel loginError) {
 		this.loginError = loginError;
+	}
+
+	public JButton getBtnSignUp() {
+		return btnSignUp;
+	}
+
+	public void setBtnSignUp(JButton btnSignUp) {
+		this.btnSignUp = btnSignUp;
+	}
+
+	public JProgressBar getSignupProg() {
+		return signupProg;
+	}
+
+	public void setSignupProg(JProgressBar signupProg) {
+		this.signupProg = signupProg;
+	}
+
+	public JLabel getSignupError() {
+		return signupError;
+	}
+
+	public void setSignupError(JLabel signupError) {
+		this.signupError = signupError;
+	}
+
+	public JTextField getNewUsername() {
+		return newUsername;
+	}
+
+	public void setNewUsername(JTextField newUsername) {
+		this.newUsername = newUsername;
+	}
+
+	public JPasswordField getNewPasswordConf() {
+		return newPasswordConf;
+	}
+
+	public void setNewPasswordConf(JPasswordField newPasswordConf) {
+		this.newPasswordConf = newPasswordConf;
+	}
+
+	public JPasswordField getNewPassword() {
+		return newPassword;
+	}
+
+	public void setNewPassword(JPasswordField newPassword) {
+		this.newPassword = newPassword;
+	}
+
+	public JTextField getEmail() {
+		return email;
+	}
+
+	public void setEmail(JTextField email) {
+		this.email = email;
 	}
 }

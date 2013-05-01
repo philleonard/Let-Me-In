@@ -42,16 +42,23 @@ import java.awt.CardLayout;
 
 
 public class ClientHome extends JFrame implements ActionListener, WindowListener, MouseListener {
-
+	
+	String VERSIONCODE = "1.0";
 	private JPanel contentPane;
-	JPanel panel;
+	JPanel panel, panel_4, panel_5, panel_6, panel_7, panel_8, panel_9;
 	TrayIcon trayIcon = null;
 	BufferedImage clientLive;
 	boolean notified = false;
 	String uname;
+	private BufferedImage faceImage1;
+	private BufferedImage faceImage2;
+	private BufferedImage faceImage3;
+	private BufferedImage faceImage4;
+	private BufferedImage faceImage5;
+	private BufferedImage faceImage6;
 	
 	public ClientHome(String uname) {
-		super("Let Me In Control");
+		super("Let Me In Client Control");
 		this.uname = uname;
 		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		setBounds(100, 100, 778, 478);
@@ -93,10 +100,8 @@ public class ClientHome extends JFrame implements ActionListener, WindowListener
 		gbc_panel_2.gridy = 1;
 		contentPane.add(panel_2, gbc_panel_2);
 		panel_2.setLayout(new CardLayout(0, 0));
-		
-		String user = System.getProperty("user.name");
 	
-		TextArea textArea = new TextArea(console(), 0, 0, 3);
+		TextArea textArea = new TextArea(console() + "Welcome to Let Me In Client v" + VERSIONCODE + "\n", 0, 0, 3);
 		textArea.setEditable(false);
 		textArea.setBackground(Color.BLACK);
 		textArea.setForeground(Color.GREEN);
@@ -110,7 +115,59 @@ public class ClientHome extends JFrame implements ActionListener, WindowListener
 		gbc_panel_3.gridx = 1;
 		gbc_panel_3.gridy = 1;
 		contentPane.add(panel_3, gbc_panel_3);
-		panel_3.setLayout(new GridLayout(1, 0, 0, 0));
+		GridBagLayout gbl_panel_3 = new GridBagLayout();
+		gbl_panel_3.columnWidths = new int[]{0, 0, 0, 0};
+		gbl_panel_3.rowHeights = new int[]{0, 0, 0};
+		gbl_panel_3.columnWeights = new double[]{1.0, 1.0, 1.0, Double.MIN_VALUE};
+		gbl_panel_3.rowWeights = new double[]{1.0, 1.0, Double.MIN_VALUE};
+		panel_3.setLayout(gbl_panel_3);
+		
+		panel_4 = new panel_4(this);
+		GridBagConstraints gbc_panel_4 = new GridBagConstraints();
+		gbc_panel_4.insets = new Insets(0, 0, 5, 5);
+		gbc_panel_4.fill = GridBagConstraints.BOTH;
+		gbc_panel_4.gridx = 0;
+		gbc_panel_4.gridy = 0;
+		panel_3.add(panel_4, gbc_panel_4);
+		
+		panel_5 = new panel_5(this);
+		GridBagConstraints gbc_panel_5 = new GridBagConstraints();
+		gbc_panel_5.insets = new Insets(0, 0, 5, 5);
+		gbc_panel_5.fill = GridBagConstraints.BOTH;
+		gbc_panel_5.gridx = 1;
+		gbc_panel_5.gridy = 0;
+		panel_3.add(panel_5, gbc_panel_5);
+		
+		panel_6 = new panel_6(this);
+		GridBagConstraints gbc_panel_6 = new GridBagConstraints();
+		gbc_panel_6.insets = new Insets(0, 0, 5, 0);
+		gbc_panel_6.fill = GridBagConstraints.BOTH;
+		gbc_panel_6.gridx = 2;
+		gbc_panel_6.gridy = 0;
+		panel_3.add(panel_6, gbc_panel_6);
+		
+		panel_7 = new panel_7(this);
+		GridBagConstraints gbc_panel_7 = new GridBagConstraints();
+		gbc_panel_7.insets = new Insets(0, 0, 0, 5);
+		gbc_panel_7.fill = GridBagConstraints.BOTH;
+		gbc_panel_7.gridx = 0;
+		gbc_panel_7.gridy = 1;
+		panel_3.add(panel_7, gbc_panel_7);
+		
+		panel_8 = new panel_8(this);
+		GridBagConstraints gbc_panel_8 = new GridBagConstraints();
+		gbc_panel_8.insets = new Insets(0, 0, 0, 5);
+		gbc_panel_8.fill = GridBagConstraints.BOTH;
+		gbc_panel_8.gridx = 1;
+		gbc_panel_8.gridy = 1;
+		panel_3.add(panel_8, gbc_panel_8);
+		
+		panel_9 = new panel_9(this);
+		GridBagConstraints gbc_panel_9 = new GridBagConstraints();
+		gbc_panel_9.fill = GridBagConstraints.BOTH;
+		gbc_panel_9.gridx = 2;
+		gbc_panel_9.gridy = 1;
+		panel_3.add(panel_9, gbc_panel_9);
 		addWindowListener(this);
 		setIconImage(Toolkit.getDefaultToolkit().getImage("res/img/door-icon.png"));
 		
@@ -123,7 +180,7 @@ public class ClientHome extends JFrame implements ActionListener, WindowListener
 	}
 	
 	private String console() {
-		String prefix = "[" + uname + "@lmi ~]$";
+		String prefix = "[" + uname + "@lmi ~]$ ";
 		return prefix;
 	}
 
@@ -178,6 +235,62 @@ public class ClientHome extends JFrame implements ActionListener, WindowListener
 	public void setImage(BufferedImage clientLive) {
 		this.clientLive = clientLive;
 		panel.repaint();
+	}
+	
+	
+	
+	public BufferedImage getFace1() {
+		return faceImage1;
+	}
+	
+	public void setFace1(BufferedImage faceImage1) {
+		this.faceImage1 = faceImage1;
+		panel_4.repaint();
+	}
+	
+	public BufferedImage getFace2() {
+		return faceImage2;
+	}
+	
+	public void setFace2(BufferedImage faceImage2) {
+		this.faceImage2 = faceImage2;
+		panel_5.repaint();
+	}
+	
+	public BufferedImage getFace3() {
+		return faceImage3;
+	}
+	
+	public void setFace3(BufferedImage faceImage3) {
+		this.faceImage3 = faceImage3;
+		panel_6.repaint();
+	}
+	
+	public BufferedImage getFace4() {
+		return faceImage4;
+	}
+	
+	public void setFace4(BufferedImage faceImage4) {
+		this.faceImage4 = faceImage4;
+		panel_7.repaint();
+	}
+	
+	public BufferedImage getFace5() {
+		return faceImage5;
+	}
+	
+	public void setFace5(BufferedImage faceImage5) {
+		this.faceImage5 = faceImage5;
+		panel_8.repaint();
+	}
+	
+	public BufferedImage getFace6() {
+		return faceImage6;
+	}
+	
+	public void setFace6(BufferedImage faceImage6) {
+		this.faceImage6 = faceImage6;
+		panel_9.repaint();
 	}
 	
 	
@@ -255,6 +368,170 @@ public class ClientHome extends JFrame implements ActionListener, WindowListener
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public void resetFaces() {
+			setFace1(null);
+			setFace2(null);
+			setFace3(null);
+			setFace4(null);
+			setFace5(null);
+			setFace6(null);
+			
+			panel_4.repaint();
+			panel_5.repaint();
+			panel_6.repaint();
+			panel_7.repaint();
+			panel_8.repaint();
+			panel_9.repaint();
+	
+	}
+}
+
+//FIX FOLLOWING HACK TO IMPLEMET INHERITANCE
+
+
+class panel_4 extends JPanel {
+	ClientHome clientHome;
+	BufferedImage faceImage;
+	
+	panel_4(ClientHome clientHome) {
+		this.clientHome = clientHome;
+		setVisible(true);
+	}
+	
+	@Override
+	public void paintComponent(Graphics g){
+		super.paintComponent(g);
+		Graphics2D g2d = (Graphics2D) g;
+		
+		faceImage = clientHome.getFace1();
+		if (faceImage != null) {
+			Image faceScaled = faceImage.getScaledInstance(this.getWidth() - 6, this.getHeight() - 6, Image.SCALE_SMOOTH);
+			g2d.drawImage(faceScaled, 3, 3, null);
+		}
+		else
+			g2d.dispose();
+	}
+}
+
+class panel_5 extends JPanel {
+	ClientHome clientHome;
+	BufferedImage faceImage;
+	
+	panel_5(ClientHome clientHome) {
+		this.clientHome = clientHome;
+		setVisible(true);
+	}
+	
+	@Override
+	public void paintComponent(Graphics g){
+		super.paintComponent(g);
+		Graphics2D g2d = (Graphics2D) g;
+		
+		faceImage = clientHome.getFace1();
+		if (faceImage != null) {
+			Image faceScaled = faceImage.getScaledInstance(this.getWidth() - 6, this.getHeight() - 6, Image.SCALE_SMOOTH);
+			g2d.drawImage(faceScaled, 3, 3, null);
+		}
+		else
+			g2d.dispose();
+	}
+}
+
+class panel_6 extends JPanel {
+	ClientHome clientHome;
+	BufferedImage faceImage;
+	
+	panel_6(ClientHome clientHome) {
+		this.clientHome = clientHome;
+		setVisible(true);
+	}
+	
+	@Override
+	public void paintComponent(Graphics g){
+		super.paintComponent(g);
+		Graphics2D g2d = (Graphics2D) g;
+		
+		faceImage = clientHome.getFace1();
+		if (faceImage != null) {
+			Image faceScaled = faceImage.getScaledInstance(this.getWidth() - 6, this.getHeight() - 6, Image.SCALE_SMOOTH);
+			g2d.drawImage(faceScaled, 3, 3, null);
+		}
+		else
+			g2d.dispose();
+	}
+}
+
+class panel_7 extends JPanel {
+	ClientHome clientHome;
+	BufferedImage faceImage;
+	
+	panel_7(ClientHome clientHome) {
+		this.clientHome = clientHome;
+		setVisible(true);
+	}
+	
+	@Override
+	public void paintComponent(Graphics g){
+		super.paintComponent(g);
+		Graphics2D g2d = (Graphics2D) g;
+		
+		faceImage = clientHome.getFace1();
+		if (faceImage != null) {
+			Image faceScaled = faceImage.getScaledInstance(this.getWidth() - 6, this.getHeight() - 6, Image.SCALE_SMOOTH);
+			g2d.drawImage(faceScaled, 3, 3, null);
+		}
+		else
+			g2d.dispose();
+	}
+}
+
+class panel_8 extends JPanel {
+	ClientHome clientHome;
+	BufferedImage faceImage;
+	
+	panel_8(ClientHome clientHome) {
+		this.clientHome = clientHome;
+		setVisible(true);
+	}
+	
+	@Override
+	public void paintComponent(Graphics g){
+		super.paintComponent(g);
+		Graphics2D g2d = (Graphics2D) g;
+		
+		faceImage = clientHome.getFace1();
+		if (faceImage != null) {
+			Image faceScaled = faceImage.getScaledInstance(this.getWidth() - 6, this.getHeight() - 6, Image.SCALE_SMOOTH);
+			g2d.drawImage(faceScaled, 3, 3, null);
+		}
+		else
+			g2d.dispose();
+	}
+}
+
+class panel_9 extends JPanel {
+	ClientHome clientHome;
+	BufferedImage faceImage;
+	
+	panel_9(ClientHome clientHome) {
+		this.clientHome = clientHome;
+		setVisible(true);
+	}
+	
+	@Override
+	public void paintComponent(Graphics g){
+		super.paintComponent(g);
+		Graphics2D g2d = (Graphics2D) g;
+		
+		faceImage = clientHome.getFace1();
+		if (faceImage != null) {
+			Image faceScaled = faceImage.getScaledInstance(this.getWidth() - 6, this.getHeight() - 6, Image.SCALE_SMOOTH);
+			g2d.drawImage(faceScaled, 3, 3, null);
+		}
+		else
+			g2d.dispose();
 	}
 }
 

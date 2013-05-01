@@ -27,7 +27,7 @@ public class RegisterAccount extends AsyncTask<Object, Object, Object> {
 	SignUp signUpClass;
 	ProgressBar load;
 	Button signUp;
-	
+	Socket client;
 	public RegisterAccount(String newUsername, String password, String emailAddress, EditText username, EditText email, TextView errorText, ProgressBar load, Button signUp, SignUp signUpClass) {
 		this.newUsername = newUsername;
 		this.password = password;
@@ -43,7 +43,7 @@ public class RegisterAccount extends AsyncTask<Object, Object, Object> {
 	@Override
 	protected Object doInBackground(Object... params) {
 
-		Socket client = new Socket();
+		client = new Socket();
 		
 		try {
 			SocketAddress remoteAddr = new InetSocketAddress("192.168.100.10", 8080);
@@ -82,7 +82,6 @@ public class RegisterAccount extends AsyncTask<Object, Object, Object> {
 			cancel(isCancelled());
 		}
 		
-		
 		try {
 			signupResponse = in.readInt();
 		} catch (IOException e) {
@@ -100,12 +99,22 @@ public class RegisterAccount extends AsyncTask<Object, Object, Object> {
 	@Override
 	protected void onPostExecute(Object result) {
 		super.onPostExecute(result);
+		try {
+			client.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		signUpClass.finish();
 	}
 	
 	@Override
 	protected void onCancelled() {
 		super.onCancelled();
+		try {
+			client.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		if (cancelReason == 1)
 			errorText.setText("Connection timeout...");
 		if (cancelReason > 1)

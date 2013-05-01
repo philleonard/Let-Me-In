@@ -22,7 +22,6 @@ public class FacialRecog implements Runnable {
 		try {
 			grab.start();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -35,7 +34,7 @@ public class FacialRecog implements Runnable {
 		
 		while (true) {
 			if (listen()) {
-				Thread cap = new Thread(new Capture(grab));
+				Thread cap = new Thread(new Capture(clientHome, grab));
 				cap.start();
 				try {
 					cap.join();
@@ -50,16 +49,14 @@ public class FacialRecog implements Runnable {
 				try {
 					res.join();
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				//Then start result thread and wait for the server to return a result
 				
-			} else
+			} 
 				try {
-					Thread.sleep(500);
+					Thread.sleep(3000);
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 		}

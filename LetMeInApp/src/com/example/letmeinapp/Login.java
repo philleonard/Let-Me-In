@@ -30,6 +30,7 @@ public class Login extends AsyncTask<Object, Object, Object>{
 	EditText username;
 	EditText password;
 	int cancelReason = 0;
+	Socket client;
 	
 	Login(String uname, String pass, TextView error, ProgressBar loginProgress, Button loginButton, EditText username, EditText password, Button signUpButton, Main main) {
 		this.uname = uname;
@@ -46,7 +47,7 @@ public class Login extends AsyncTask<Object, Object, Object>{
 	@Override
 	protected Object doInBackground(Object... arg0) {
 		
-		Socket client = new Socket();
+		client = new Socket();
 		
 		try {
 			SocketAddress remoteAddr = new InetSocketAddress("192.168.100.10", 8080);
@@ -117,12 +118,21 @@ public class Login extends AsyncTask<Object, Object, Object>{
 	@Override
 	protected void onPostExecute(Object result) {
 		super.onPostExecute(result);
+		try {
+			client.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		main.startActivity(new Intent(main.getApplicationContext(), HomeScreen.class));
 	}
 	
 	@Override
 	protected void onCancelled() {
-		System.out.println("CANCELLED: " + cancelReason);
+		try {
+			client.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		loginProgress.setVisibility(View.INVISIBLE);
 		loginButton.setVisibility(View.VISIBLE);
 		signUpButton.setVisibility(View.VISIBLE);
