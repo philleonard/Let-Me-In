@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
+import java.net.SocketTimeoutException;
 
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 
 public class Login extends AsyncTask<Object, Object, Object>{
 	
+	final int APP = 1;
 	final int LOGIN = 0;
 	String uname;
 	String pass;
@@ -49,21 +51,24 @@ public class Login extends AsyncTask<Object, Object, Object>{
 		try {
 			SocketAddress remoteAddr = new InetSocketAddress("192.168.100.10", 8080);
 			client.connect(remoteAddr, 8000);
-		} catch (Exception e) {
+		} catch (SocketTimeoutException e) {
 			try {
 				client.close();
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			e.printStackTrace();
 			cancelReason = 1;
 			cancel(isCancelled());
+		} catch (IOException e) {
+			cancelReason = 9;
+			e.printStackTrace();
 		}
 		
 		DataOutputStream out;
 		try {
 			out = new DataOutputStream(client.getOutputStream());
+			out.writeInt(APP);
 			out.writeInt(LOGIN);
 			out.writeUTF(uname);
 			out.writeUTF(pass);
@@ -104,7 +109,6 @@ public class Login extends AsyncTask<Object, Object, Object>{
 		try {
 			client.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
@@ -124,7 +128,9 @@ public class Login extends AsyncTask<Object, Object, Object>{
 		signUpButton.setVisibility(View.VISIBLE);
 		
 		if (cancelReason == 1)
-			error.setText("Connection timeout...");
+			error.setText("Connection timeout");
+		else if (cancelReason == 9)
+			error.setText("Connection refused");
 		else if (cancelReason == 7) {
 			error.setText("User " + uname + " not found");
 			username.setText("");

@@ -14,11 +14,6 @@ import com.googlecode.javacv.cpp.opencv_core.CvSeq;
 import com.googlecode.javacv.cpp.opencv_objdetect.CvHaarClassifierCascade;
 
 public class Capture implements Runnable {
-	
-    CanvasFrame canvas = new CanvasFrame("Face Detect");
-    public Capture() {
-        canvas.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
-    }
     
     FrameGrabber grabber;
     public Capture(FrameGrabber grab) {
@@ -46,7 +41,7 @@ public class Capture implements Runnable {
     					newImage = cvCreateImage(cvGetSize(image), image.depth(), image.nChannels());
     					cvCopy(image, newImage);
     					cvResetImageROI(image);
-    					canvas.showImage(newImage);
+    					//display image on frame
     					
     					SendAndRecv sendImage = new SendAndRecv();
               			sendImage.sendToServ(newImage, "username", "password");
@@ -60,7 +55,7 @@ public class Capture implements Runnable {
         } catch (Exception e) {
         	System.out.println("FaceRecogModule: Capture failed");
         }
-        canvas.dispose();
+    
     }
    
 }
