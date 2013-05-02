@@ -25,7 +25,7 @@ public class ClientLogin extends Thread{
 
 	@Override
 	public void run() {
-		/*
+		
 		client = new Socket();
 		
 		try {
@@ -102,7 +102,7 @@ public class ClientLogin extends Thread{
 			e.printStackTrace();
 		}
 		
-		resetVis();*/
+		resetVis();
 		clientMain.dispose();
 		ClientHome ch = new ClientHome(uname);
 		ch.setVisible(true);

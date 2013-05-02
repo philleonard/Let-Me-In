@@ -39,6 +39,16 @@ import javax.swing.Box;
 import java.awt.Font;
 import java.awt.FlowLayout;
 import java.awt.CardLayout;
+import java.lang.management.ManagementFactory;
+import java.lang.management.MemoryMXBean;
+import java.lang.management.OperatingSystemMXBean;
+import java.lang.management.RuntimeMXBean;
+import java.lang.management.ThreadMXBean;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 
 
 public class ClientHome extends JFrame implements ActionListener, WindowListener, MouseListener {
@@ -56,8 +66,13 @@ public class ClientHome extends JFrame implements ActionListener, WindowListener
 	private BufferedImage faceImage4;
 	private BufferedImage faceImage5;
 	private BufferedImage faceImage6;
+	private JLabel lblUsername;
+	private JLabel lblCpuUsage;
+	private JLabel lblMemoryUsage;
+	private JLabel lblThreads;
+	private JLabel lblUptime;
 	
-	public ClientHome(String uname) {
+	public ClientHome(final String uname) {
 		super("Let Me In Client Control");
 		this.uname = uname;
 		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
@@ -74,13 +89,66 @@ public class ClientHome extends JFrame implements ActionListener, WindowListener
 		contentPane.setLayout(gbl_contentPane);
 		
 		JPanel panel_1 = new JPanel();
-		panel_1.setBorder(new TitledBorder(new LineBorder(new Color(0, 0, 0)), "Account Info", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panel_1.setBorder(new TitledBorder(new LineBorder(new Color(0, 0, 0)), "Info", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		GridBagConstraints gbc_panel_1 = new GridBagConstraints();
 		gbc_panel_1.fill = GridBagConstraints.BOTH;
 		gbc_panel_1.insets = new Insets(0, 0, 5, 5);
 		gbc_panel_1.gridx = 0;
 		gbc_panel_1.gridy = 0;
 		contentPane.add(panel_1, gbc_panel_1);
+		GridBagLayout gbl_panel_1 = new GridBagLayout();
+		gbl_panel_1.columnWidths = new int[]{0, 0};
+		gbl_panel_1.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0};
+		gbl_panel_1.columnWeights = new double[]{0.0, Double.MIN_VALUE};
+		gbl_panel_1.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		panel_1.setLayout(gbl_panel_1);
+		
+		lblUsername = new JLabel("Signed in as: ");
+		lblUsername.setHorizontalAlignment(SwingConstants.LEFT);
+		lblUsername.setFont(new Font("Calibri", Font.BOLD, 13));
+		GridBagConstraints gbc_lblUsername = new GridBagConstraints();
+		gbc_lblUsername.anchor = GridBagConstraints.WEST;
+		gbc_lblUsername.insets = new Insets(0, 0, 5, 0);
+		gbc_lblUsername.gridx = 0;
+		gbc_lblUsername.gridy = 0;
+		panel_1.add(lblUsername, gbc_lblUsername);
+		
+		lblUptime = new JLabel("Uptime: ");
+		lblUptime.setFont(new Font("Calibri", Font.PLAIN, 13));
+		GridBagConstraints gbc_lblUptime = new GridBagConstraints();
+		gbc_lblUptime.anchor = GridBagConstraints.WEST;
+		gbc_lblUptime.insets = new Insets(0, 0, 5, 0);
+		gbc_lblUptime.gridx = 0;
+		gbc_lblUptime.gridy = 3;
+		panel_1.add(lblUptime, gbc_lblUptime);
+		
+		lblCpuUsage = new JLabel("CPU usage:");
+		lblCpuUsage.setFont(new Font("Calibri", Font.PLAIN, 13));
+		lblCpuUsage.setHorizontalAlignment(SwingConstants.LEFT);
+		GridBagConstraints gbc_lblCpuUsage = new GridBagConstraints();
+		gbc_lblCpuUsage.anchor = GridBagConstraints.WEST;
+		gbc_lblCpuUsage.insets = new Insets(0, 0, 5, 0);
+		gbc_lblCpuUsage.gridx = 0;
+		gbc_lblCpuUsage.gridy = 4;
+		panel_1.add(lblCpuUsage, gbc_lblCpuUsage);
+		
+		lblMemoryUsage = new JLabel("Memory usage:");
+		lblMemoryUsage.setFont(new Font("Calibri", Font.PLAIN, 13));
+		lblMemoryUsage.setHorizontalAlignment(SwingConstants.LEFT);
+		GridBagConstraints gbc_lblMemoryUsage = new GridBagConstraints();
+		gbc_lblMemoryUsage.anchor = GridBagConstraints.WEST;
+		gbc_lblMemoryUsage.insets = new Insets(0, 0, 5, 0);
+		gbc_lblMemoryUsage.gridx = 0;
+		gbc_lblMemoryUsage.gridy = 5;
+		panel_1.add(lblMemoryUsage, gbc_lblMemoryUsage);
+		
+		lblThreads = new JLabel("Threads: ");
+		lblThreads.setFont(new Font("Calibri", Font.PLAIN, 13));
+		GridBagConstraints gbc_lblThreads = new GridBagConstraints();
+		gbc_lblThreads.anchor = GridBagConstraints.WEST;
+		gbc_lblThreads.gridx = 0;
+		gbc_lblThreads.gridy = 6;
+		panel_1.add(lblThreads, gbc_lblThreads);
 		
 		panel = new panel(this);
 		panel.setBorder(new TitledBorder(new LineBorder(new Color(0, 0, 0)), "Live Image", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -174,6 +242,68 @@ public class ClientHome extends JFrame implements ActionListener, WindowListener
         if (SystemTray.isSupported()) {
             sysTray();
         }
+        
+        new Timer().schedule(new TimerTask() {
+
+			@Override
+			public void run() {
+				
+				ThreadMXBean tmx = ManagementFactory.getThreadMXBean();
+				MemoryMXBean mmx = ManagementFactory.getMemoryMXBean();
+				RuntimeMXBean rmx = ManagementFactory.getRuntimeMXBean();
+				OperatingSystemMXBean osmx = ManagementFactory.getOperatingSystemMXBean();
+				
+				osmx.getSystemLoadAverage();
+				long uptimens = rmx.getUptime();
+				
+				
+				lblUsername.setText("Signed in as: " + uname);
+				lblUptime.setText("Uptime: " + calcTime(uptimens));
+				lblMemoryUsage.setText("Memory usage: " + (mmx.getHeapMemoryUsage().getUsed()/1024)/1024 + "Mb");
+				lblThreads.setText("Threads: " + tmx.getThreadCount());
+				//lblCpuUsage.setText("CPU usage: " + osmx.getSystemLoadAverage());
+				
+			
+			}
+
+			private String calcTime(long uptimens) {
+				int x = (int) (uptimens / 1000);
+				
+				int seconds = x % 60;
+				String s;
+				if (seconds < 10)
+					s = "0" + seconds;
+				else
+					s = "" + seconds;
+				
+				x /= 60;
+				int minutes = x % 60;
+				String m;
+				if (minutes  < 10)
+					m = "0" + minutes;
+				else
+					m = "" + minutes;
+				
+				x /= 60;
+				int hours = x % 24;
+				String h;
+				if (hours < 10)
+					h = "0" + hours;
+				else
+					h = "" + hours;
+				
+				x /= 24;
+				int days = x;
+				String d;
+				if (days < 10)
+					d = "0" + days;
+				else
+					d = "" + days;
+				
+				String viewform = d + ":" + h + ":" + m + ":" + s;
+				return viewform;
+			}
+        }, 1000, 1000);
         
         Thread fr = new Thread(new FacialRecog(this));
         fr.start();
@@ -387,8 +517,6 @@ public class ClientHome extends JFrame implements ActionListener, WindowListener
 	
 	}
 }
-
-//FIX FOLLOWING HACK TO IMPLEMET INHERITANCE
 
 
 class facePanel extends JPanel {

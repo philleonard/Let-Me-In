@@ -15,7 +15,7 @@ public class MyDoor extends Activity {
 	ProgressBar load;
 	ImageView webcamImage;
 	TextView timeout;
-	
+	AsyncTask<Object, Object, Object> ri;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -33,7 +33,7 @@ public class MyDoor extends Activity {
 	
 					@Override
 					public void run() {
-						AsyncTask<Object, Object, Object> ri = new RetreiveImage(webcamImage, load, timeout).execute();
+						ri = new RetreiveImage(webcamImage, load, timeout).execute();
 					}
 			    	
 			    });
@@ -42,6 +42,7 @@ public class MyDoor extends Activity {
 	}
 	
 	public void onBackPressed() {
+		ri.cancel(true);
 		finish();
 	}
 			
