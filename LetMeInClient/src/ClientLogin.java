@@ -102,7 +102,6 @@ public class ClientLogin extends Thread{
 			e.printStackTrace();
 		}
 		
-		resetVis();
 		clientMain.dispose();
 		ClientHome ch = new ClientHome(uname);
 		ch.setVisible(true);

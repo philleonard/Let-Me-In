@@ -20,6 +20,12 @@ public class FacialRecog implements Runnable {
 	@Override
 	public void run(){
 		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		try {
 			grab.start();
 		} catch (Exception e) {
 			e.printStackTrace();
