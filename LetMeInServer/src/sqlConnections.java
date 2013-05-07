@@ -2,7 +2,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class sqlConnections{
+public class SQLConnections{
 	private static Statement statement = null;
 	private static ResultSet rs = null;
 	private static PreparedStatement ps = null;
@@ -86,6 +86,7 @@ public class sqlConnections{
 	  //identify 0 = client, 1 = phone
 	  Connection conn = connect();
 	  String query;
+	  System.out.println("Sign In Request");
 	  int result = 1;
 	  if (conn == null) {
 		  System.out.println("NULL");
@@ -99,7 +100,7 @@ public class sqlConnections{
 			  if(rs.next()){
 				  if (rs.getString("password").equals(password)){
 					 result = 0;
-					 
+					 System.out.println("Sign In Successful");
 					 if (identifier == 1) {
 						 if (!ipAddress.equals(rs.getString("phoneip"))){
 							 
@@ -139,7 +140,7 @@ public class sqlConnections{
 		  
 		  
 	  }//end else
-	  
+	  disconnect(conn);
 	  return result;
   }
   
@@ -148,6 +149,7 @@ public class sqlConnections{
 	  String query;
 	  String query2;
 	  int result = -1;
+	  System.out.println("Sign Up Attempt");
 	  if (conn == null) {
 		  System.out.println("NULL");
 	  }
@@ -157,7 +159,7 @@ public class sqlConnections{
 			  statement = conn.createStatement();
 			  rs = statement.executeQuery(query);			  
 			  if(rs.next()){
-				 System.out.println("Username Exists");
+				 //System.out.println("Username Exists");
 				 result = 1;
 			  }
 			  
@@ -199,7 +201,8 @@ public class sqlConnections{
 		  
 		  
 	  }//end else
-	  return 0;
+	  disconnect(conn);
+	  return result;
   }
   
   
