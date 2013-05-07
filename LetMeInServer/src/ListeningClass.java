@@ -14,7 +14,7 @@ import java.net.Socket;
  *
  */
 
-public class clientListeningClass implements Runnable {
+public class ListeningClass implements Runnable {
 	private static ServerSocket listeningSocket;
 
 	public void run(){
@@ -26,9 +26,9 @@ public class clientListeningClass implements Runnable {
 	         while (true) {
 	        	 Socket tempSock = new Socket();
 	        	 tempSock = listeningSocket.accept();
-	             System.out.println("Connected to (tempsock): "+ tempSock.getRemoteSocketAddress());
+	             //System.out.println("Connected to (tempsock): "+ tempSock.getRemoteSocketAddress());
 	        	 
-	             Thread t = new Thread(new servPCtoServ(tempSock));
+	             Thread t = new Thread(new ConntoServ(tempSock));
 	             t.start();
 	             
 	        	 

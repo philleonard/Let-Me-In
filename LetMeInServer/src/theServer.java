@@ -1,10 +1,9 @@
 
-public class theServer extends Thread {
+public class TheServer extends Thread {
 	public static void main(String[] args) {
 		
-		Thread t = new Thread(new clientListeningClass()); //listens on port 8080
-		Thread s = new Thread(new phoneListeningClass()); //listens on port 8181
+		Thread t = new Thread(new ListeningClass()); //listens on port 8080
 		t.start();
-		s.start();
+		
 	}
 }
