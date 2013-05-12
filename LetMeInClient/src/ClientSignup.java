@@ -33,7 +33,7 @@ public class ClientSignup extends Thread{
 		client = new Socket();
 		
 		try {
-			SocketAddress remoteAddr = new InetSocketAddress("192.168.100.10", 8080);
+			SocketAddress remoteAddr = new InetSocketAddress("192.168.1.178", 8080);
 			client.connect(remoteAddr, 8000);
 		} catch (SocketTimeoutException e) {
 			closeSocket();

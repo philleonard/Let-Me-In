@@ -27,8 +27,7 @@ public class RetreiveImage extends AsyncTask<Object, Object, Object> {
 		this.webcamImage = webcamImage;
 		this.load = load;
 		this.timeout = timeout;
-	}
-	
+	} 
 	
 	@Override
 	protected Bitmap doInBackground(Object... arg0) {
@@ -37,7 +36,7 @@ public class RetreiveImage extends AsyncTask<Object, Object, Object> {
 		BufferedImage webcamPhoto = null;
 		
 		try {
-			SocketAddress remoteAddr = new InetSocketAddress("192.168.45.50", 8100);
+			SocketAddress remoteAddr = new InetSocketAddress("192.168.1.73", 8100);
 			client.connect(remoteAddr , 5000);
 		} catch (Exception e) {
 			e.printStackTrace();
