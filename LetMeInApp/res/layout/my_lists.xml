@@ -13,4 +13,12 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true" />
 
+    <ExpandableListView
+        android:id="@+id/expandableListView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true" >
+    </ExpandableListView>
+
 </RelativeLayout>

@@ -1,0 +1,25 @@
+Pseudo code for ListView
+
+main():
+i = getNumberOfItems();
+
+for g = 0 to i 
+	populateListItem(g);
+end
+
+
+
+getNumberOfItems():
+contact server with username and password
+server returns number of people in users list
+return that val;
+
+
+populateListItem(g);
+from server get list peorson g
+	->get image
+	->get name
+	->get automatic response
+	->maybe get group (friend, family, aquaintance, stranger)
+
+set buttons and fields to alter above and set listeners etc..

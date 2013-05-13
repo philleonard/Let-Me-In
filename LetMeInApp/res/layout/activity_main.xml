@@ -24,12 +24,12 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/username"
         android:layout_alignRight="@+id/username"
-        android:layout_below="@+id/remeber"
+        android:layout_below="@+id/remember"
         android:gravity="center"
         android:text="Login" />
 
     <CheckBox
-        android:id="@+id/remeber"
+        android:id="@+id/remember"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/password"
@@ -41,11 +41,11 @@
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/remeber"
+        android:layout_below="@+id/remember"
         android:layout_centerHorizontal="true" />
 
     <TextView
-        android:id="@+id/failMessage"
+        android:id="@+id/userText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/username"
