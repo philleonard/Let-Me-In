@@ -48,9 +48,52 @@ public class SQLConnections{
 		}
 	}
 	  
+  public static String getIDFromUsername(String username){
+	  Connection conn = connect();
+	  String userid = null;
+	  if (conn == null) {
+		  System.out.println("NULL");
+	  }
+	  else {
+		  String query = "SELECT userid FROM users WHERE username = \""+username+"\"";
+		  try {
+			  statement = conn.createStatement();
+			  rs = statement.executeQuery(query);
+			  while (rs.next()) {
+				  userid = rs.getString("userid");
+				  System.out.println(userid);
+			  }
+		  } catch (SQLException e ) {} 
+		  
+	  }
+	  disconnect(conn);
+	  
+	  return userid;
+  }
   
+  public static String getPicNameFromId(int picID){
+	  String picName = null;
+	  Connection conn = connect();
+	  if (conn == null) {
+		  System.out.println("NULL");
+	  }
+	  else {
+		  String query = "SELECT name FROM photos WHERE photoid = \""+picID+"\"";
+		  try {
+			  statement = conn.createStatement();
+			  rs = statement.executeQuery(query);
+			  while (rs.next()) {
+				  picName = rs.getString("name");
+				  System.out.println(picName);
+			  }
+		  } catch (SQLException e ) {} 
+		  
+	  }
+	  disconnect(conn);
+	  return picName;
+  }
   
-  public static String[] getPicsAndIDs (int userid) throws Exception {
+  /*public static String[] getPicsAndIDs (int userid) throws Exception {
 	  Connection conn = connect();
 	  String[] addList = null;
 	  if (conn == null) {
@@ -78,7 +121,7 @@ public class SQLConnections{
 	  }
 	  disconnect(conn);
 	  return addList;
-  }
+  }*/
   
   
   //needs full testing, not yet tested
@@ -211,6 +254,8 @@ public class SQLConnections{
   public static void main(String[] args) throws Exception{
 	  //signUp("james", "bob", "tit");
 	  //loginAuthentication("jamestrever", "password", "ipAddress", 0);
+	  System.out.println(getIDFromUsername("chuck"));
+	  System.out.println(getPicNameFromId(1));
   }
   
 }
