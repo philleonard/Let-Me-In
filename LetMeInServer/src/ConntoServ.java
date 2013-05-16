@@ -11,6 +11,7 @@ import javax.imageio.ImageIO;
 import javax.swing.GrayFilter;
 
 import com.googlecode.javacv.CanvasFrame;
+import com.googlecode.javacv.cpp.opencv_core.IplImage;
 
 //Lines of code that end with // will be deleted in the final version, these are for test purposes
 
@@ -38,6 +39,8 @@ public class ConntoServ implements Runnable{
      	DataInputStream in = new DataInputStream(acceptSocket.getInputStream());
      	DataOutputStream out = new DataOutputStream(acceptSocket.getOutputStream());
      	int identifier = in.readInt();
+     	//first identifier indetifies whether it is phone or client; client = 0, phone = 1.
+     	//Second identifier indentifies whether it is a login request or signup; login = 0, signup = 1;
      	if (identifier == 0) { 
      		identifier = in.readInt();
      		if (identifier == 0) {
@@ -82,9 +85,7 @@ public class ConntoServ implements Runnable{
     	        result = SQLConnections.signUp(username, password, emailAddress);
     	        out.writeInt(result);
         	}
-        	while (result==0) {
-        		//stuff to do then send exit signal
-        	}
+        	
      	}
      	
      	else {
@@ -93,7 +94,7 @@ public class ConntoServ implements Runnable{
      	
      	
      	while (result==0) {
-     		/*//stuff to do then send exit signal
+     		//stuff to do then send exit signal
 	     	System.out.println("Attempting retreival of photo");
 	        BufferedImage image = ImageIO.read(in);
 	        System.out.println("Received Image");
@@ -103,21 +104,16 @@ public class ConntoServ implements Runnable{
 	            ImageIO.write(image, "JPG", outputfile);//
 	            System.out.println("Successfully saved");//
 	        } catch (IOException e) {}//
-			canvas.showImage(image);//
+			//canvas.showImage(image);//
+	        
+	        IplImage comparisonImage = IplImage.createFrom(image);
+			username = "false";
+	        String userID = SQLConnections.getIDFromUsername(username);
+	        
+			int picID = FacialRecognition.recognise(userID, comparisonImage);
 			
-			BufferedImage grayimage = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_BYTE_GRAY);
-			Graphics g = grayimage.getGraphics();
-			g.drawImage(image, 0, 0, null);
-			g.dispose(); 
+			String picName = SQLConnections.getPicNameFromId(picID);
 			
-			
-			//if array[0] == 0 then no such record;
-			//c:\(userid)\(photoid).pgm
-			//String[] array = sqlConnections.getPicsAndIDs(userid); //this stores the location of the pictures
-			//int recognised = faceRec(array);
-			
-			
-			//String picid = facerecognition(image, userid);
 			
 			
 			/**
