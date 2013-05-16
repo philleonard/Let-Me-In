@@ -1,5 +1,7 @@
 package com.example.letmeinapp;
-
+/*
+ * @author Philip Leonard
+ */
 import com.example.letmeinapp.R;
 
 import android.app.Activity;

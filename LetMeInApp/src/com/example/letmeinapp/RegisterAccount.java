@@ -1,5 +1,7 @@
 package com.example.letmeinapp;
-
+/*
+ * @author Philip Leonard
+ */
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;

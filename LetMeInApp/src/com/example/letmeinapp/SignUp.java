@@ -1,5 +1,7 @@
 package com.example.letmeinapp;
-
+/*
+ * @author Philip Leonard
+ */
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;

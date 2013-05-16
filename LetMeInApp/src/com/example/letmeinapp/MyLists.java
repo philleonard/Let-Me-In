@@ -1,5 +1,7 @@
 package com.example.letmeinapp;
-
+/*
+ * @author Philip Leonard
+ */
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 

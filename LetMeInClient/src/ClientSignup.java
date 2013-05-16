@@ -6,7 +6,9 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.SocketTimeoutException;
-
+/*
+ * @author Philip Leonard
+ */
 
 public class ClientSignup extends Thread{
 	

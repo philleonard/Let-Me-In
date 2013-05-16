@@ -3,7 +3,9 @@ import java.net.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import javax.imageio.ImageIO;
-
+/*
+ * @author James
+ */
 public class SendAndRecv {
 	public int sendToServ (IplImage image, String username, String password) {
 		//Send image to server, return 0 if success, -1 else

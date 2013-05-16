@@ -6,7 +6,9 @@ import com.googlecode.javacv.VideoInputFrameGrabber;
 import com.googlecode.javacv.cpp.opencv_core.IplImage;
 import static com.googlecode.javacv.cpp.opencv_core.*;
 import static com.googlecode.javacv.cpp.opencv_objdetect.*;
-
+/*
+ * @author Philip Leonard
+ */
 
 public class FacialRecog implements Runnable {
 	

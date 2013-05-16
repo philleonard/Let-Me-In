@@ -49,7 +49,9 @@ import java.util.TimerTask;
 
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
-
+/*
+ * @author Philip Leonard
+ */
 
 public class ClientHome extends JFrame implements ActionListener, WindowListener, MouseListener {
 	

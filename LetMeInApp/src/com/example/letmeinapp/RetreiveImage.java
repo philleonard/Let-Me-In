@@ -1,5 +1,7 @@
 package com.example.letmeinapp;
-
+/*
+ * @author Philip Leonard
+ */
 import java.awt.image.BufferedImage;
 import java.io.DataInputStream;
 import java.io.IOException;
