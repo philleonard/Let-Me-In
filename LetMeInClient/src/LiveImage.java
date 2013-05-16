@@ -3,7 +3,7 @@ import java.awt.image.BufferedImage;
 import com.googlecode.javacv.FrameGrabber;
 import com.googlecode.javacv.FrameGrabber.Exception;
 import com.googlecode.javacv.cpp.opencv_core.IplImage;
-/*
+/**
  * @author Philip Leonard
  */
 

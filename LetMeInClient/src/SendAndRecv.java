@@ -3,7 +3,7 @@ import java.net.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import javax.imageio.ImageIO;
-/*
+/**
  * @author James
  */
 public class SendAndRecv {

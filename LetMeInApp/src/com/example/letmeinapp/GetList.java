@@ -114,6 +114,7 @@ public class GetList extends AsyncTask<Object, Object, Object> implements Serial
 			//Now set above data to each list item
 		
 		}
+		
 		try {
 			client.close();
 		} catch (IOException e) {

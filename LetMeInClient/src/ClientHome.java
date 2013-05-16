@@ -49,7 +49,7 @@ import java.util.TimerTask;
 
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
-/*
+/**
  * @author Philip Leonard
  */
 

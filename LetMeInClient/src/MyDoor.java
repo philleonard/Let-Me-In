@@ -10,7 +10,7 @@ import com.googlecode.javacv.FrameGrabber;
 import com.googlecode.javacv.FrameGrabber.Exception;
 import com.googlecode.javacv.VideoInputFrameGrabber;
 import com.googlecode.javacv.cpp.opencv_core.IplImage;
-/*
+/**
  * @author Philip Leonard
  */
 

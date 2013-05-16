@@ -1,5 +1,5 @@
 package com.example.letmeinapp;
-/*
+/**
  * @author Philip Leonard
  */
 import com.example.letmeinapp.R;

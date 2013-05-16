@@ -1,4 +1,4 @@
-/*
+/**
  * @author Philip Leonard
  */
 public class Result implements Runnable {

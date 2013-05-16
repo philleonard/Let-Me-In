@@ -18,7 +18,7 @@ import com.googlecode.javacv.VideoInputFrameGrabber;
 import com.googlecode.javacv.cpp.opencv_core.CvMemStorage;
 import com.googlecode.javacv.cpp.opencv_core.CvSeq;
 import com.googlecode.javacv.cpp.opencv_objdetect.CvHaarClassifierCascade;
-/*
+/**
  * @author Philip Leonard
  */
 public class Capture implements Runnable {
