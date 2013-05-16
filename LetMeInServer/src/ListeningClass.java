@@ -27,8 +27,8 @@ public class ListeningClass implements Runnable {
 	        	 Socket tempSock = new Socket();
 	        	 tempSock = listeningSocket.accept();
 	             //System.out.println("Connected to (tempsock): "+ tempSock.getRemoteSocketAddress());
-	        	 
-	             Thread t = new Thread(new ConntoServ(tempSock));
+
+	        	 Thread t = new Thread(new ConntoServ(tempSock));
 	             t.start();
 	             
 	        	 
