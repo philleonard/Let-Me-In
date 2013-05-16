@@ -25,7 +25,7 @@ public class Main extends Activity {
 		setContentView(R.layout.activity_main);
 		
 		final Button loginButton = (Button) findViewById(R.id.login);
-		final ProgressBar loginProgress = (ProgressBar) findViewById(R.id.loginProgress);
+		final ProgressBar loginProgress = (ProgressBar) findViewById(R.id.myListProg);
 		final EditText username = (EditText) findViewById(R.id.username);
 		final EditText password = (EditText) findViewById(R.id.password);
 		final TextView error = (TextView) findViewById(R.id.userText);
