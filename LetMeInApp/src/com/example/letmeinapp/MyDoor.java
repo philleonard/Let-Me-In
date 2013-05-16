@@ -44,7 +44,9 @@ public class MyDoor extends Activity {
 	}
 	
 	public void onBackPressed() {
-		ri.cancel(true);
+		try {
+			ri.cancel(true);
+		} catch (Exception e) {}
 		finish();
 	}
 			

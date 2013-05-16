@@ -1,8 +1,9 @@
 package com.example.letmeinapp;
-/*
+/**
  * @author Philip Leonard
  */
 //import java.awt.image.BufferedImage;
+import java.awt.image.BufferedImage;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -12,16 +13,19 @@ import java.io.Serializable;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
+import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 
-public class GetListNumber extends AsyncTask<Object, Object, Object> implements Serializable {
+public class GetList extends AsyncTask<Object, Object, Object> implements Serializable {
 	
 	private SharedPreferences settings;
 	
@@ -30,7 +34,7 @@ public class GetListNumber extends AsyncTask<Object, Object, Object> implements 
 	MyLists myLists;
 	String user;
 	
-	public GetListNumber(String user, MyLists myLists) {
+	public GetList(String user, MyLists myLists) {
 		this.user = user;
 		this.myLists = myLists;
 	}
@@ -42,6 +46,7 @@ public class GetListNumber extends AsyncTask<Object, Object, Object> implements 
 	protected Object doInBackground(Object... arg0) {
 		
 		client = new Socket();
+	
 		try {
 			SocketAddress remoteAddr = new InetSocketAddress("192.168.100.5", 8080);
 			client.connect(remoteAddr, 8000);
@@ -55,8 +60,14 @@ public class GetListNumber extends AsyncTask<Object, Object, Object> implements 
 			cancel(isCancelled());
 		} catch (IOException e) {
 			e.printStackTrace();
+			cancel(isCancelled());
 		}
-		
+		try {
+			client.setKeepAlive(true);
+		} catch (SocketException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
 		
 		DataOutputStream out;
 		try {
@@ -69,58 +80,58 @@ public class GetListNumber extends AsyncTask<Object, Object, Object> implements 
 			cancel(isCancelled());
 		}
 		
-		ObjectInputStream objIn = null;
+		DataInputStream in = null;
+		int size = 0;
 		try {
-			objIn = new ObjectInputStream(client.getInputStream());
-		} catch (Exception e) {
-			e.printStackTrace();
-			cancel(isCancelled());
-		}
-		
-		
-		MyObject listObject = null;
-		try {
-			 listObject = (MyObject) objIn.readObject();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-			cancel(isCancelled());
-		} catch (OptionalDataException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			cancel(isCancelled());
+			in = new DataInputStream(client.getInputStream());
+			size = in.readInt();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			cancel(isCancelled());
 		}
-		
-		return listObject;
-	}
-	
-	private void populateList(Object listObject) {
-		
-		
-		Object[] listObjectArray = (Object[]) listObject;
-		
+		System.out.println("Size = " + size);
 		ArrayList<String> name_list = new ArrayList<String>();
 		
-		for (int i = 0; i < listObjectArray.length; i++) {
-			Object[] itemObjectArray = (Object[]) listObjectArray[i];
+		for (int i = 0; i < size; i++) {
 			
-			//BufferedImage face = (BufferedImage) itemObjectArray[0];
-			String personName = (String) itemObjectArray[1];
-			name_list.add(personName);
-			String automaticResponse = (String) itemObjectArray[2];
-			String group = (String) itemObjectArray[3];
+			Bitmap face = null;
+			String name = null;
+			String defaultAction = null;
+			String group = null;
+			
+			try {
+				name = in.readUTF();
+				defaultAction = in.readUTF();
+				group = in.readUTF();
+				face = BitmapFactory.decodeStream(in);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+			name_list.add(name);
+			
 			
 			//Now set above data to each list item
 		
 		}
+		try {
+			client.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return name_list;
+	}
+	
+	private void populateList(Object result) {
 		
+		ArrayList<String> name_list = (ArrayList<String>) result;
+		
+		myLists.spin.setVisibility(View.INVISIBLE);
         // This is the array adapter, it takes the context of the activity as a first // parameter, the type of list view as a second parameter and your array as a third parameter
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(myLists,android.R.layout.simple_list_item_1, name_list);
 		myLists.list.setAdapter(arrayAdapter);
-		myLists.spin.setVisibility(View.INVISIBLE);
+		
 	}
 
 	@Override
@@ -130,8 +141,4 @@ public class GetListNumber extends AsyncTask<Object, Object, Object> implements 
 		populateList(result);	
 	}
 
-}
-
-class MyObject implements Serializable {
-	Object[] objectListArray;
 }

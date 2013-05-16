@@ -31,7 +31,7 @@ public class MyLists extends Activity {
 		list = (ListView) findViewById(R.id.listView1);		
 		spin = (ProgressBar) findViewById(R.id.myListProg);
 		
-		AsyncTask<Object, Object, Object> ln = new GetListNumber(loadSaved(), this).execute();
+		AsyncTask<Object, Object, Object> ln = new GetList(loadSaved(), this).execute();
 		
 	}
 	
