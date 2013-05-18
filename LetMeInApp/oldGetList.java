@@ -28,7 +28,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListAdapter;
 
-public class GetList extends AsyncTask<Object, Object, Object> implements Serializable {
+public class GetListOld extends AsyncTask<Object, Object, Object> implements Serializable {
 	
 	private SharedPreferences settings;
 	
@@ -37,21 +37,21 @@ public class GetList extends AsyncTask<Object, Object, Object> implements Serial
 	MyLists myLists;
 	String user;
 	
-	public GetList(String user, MyLists myLists) {
+	public GetListOld(String user, MyLists myLists) {
 		this.user = user;
 		this.myLists = myLists;
 	}
 	
 
 	Socket client;
-	DataInputStream in;
+	DataInputStream in = null;
 	
 	@Override
 	protected Object doInBackground(Object... arg0) {
 		
 		client = new Socket();
 	
-		connect(8080);
+		connect();
 		
 		DataOutputStream out;
 		try {
@@ -76,8 +76,13 @@ public class GetList extends AsyncTask<Object, Object, Object> implements Serial
 		ArrayList<Item> itemList = new ArrayList<Item>();
 		
 		for (int i = 0; i < size; i++) {
+			try {
+				client.close();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
 			
-			connect(8181);
+			connect();
 			newDIS();
 		
 			Bitmap face = null;
@@ -115,6 +120,13 @@ public class GetList extends AsyncTask<Object, Object, Object> implements Serial
 	}
 	
 	private void newDIS() {
+		try {
+			in.close();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
 		in = null;
 		try {
 			in = new DataInputStream(client.getInputStream());
@@ -125,10 +137,9 @@ public class GetList extends AsyncTask<Object, Object, Object> implements Serial
 		
 	}
 
-	private void connect(int port) {
-		client = new Socket();
+	private void connect() {
 		try {
-			SocketAddress remoteAddr = new InetSocketAddress("192.168.100.6", port);
+			SocketAddress remoteAddr = new InetSocketAddress("192.168.100.6", 8080);
 			client.connect(remoteAddr, 8000);
 		} catch (SocketTimeoutException e) {
 			try {
@@ -154,8 +165,7 @@ public class GetList extends AsyncTask<Object, Object, Object> implements Serial
 		
 		MyArrayAdapter adapter = (MyArrayAdapter) result;
 		myLists.spin.setVisibility(View.INVISIBLE);
-		myLists.saveButton.setVisibility(View.VISIBLE);
-		myLists.addNew.setVisibility(View.VISIBLE);
+	
 		myLists.list.setAdapter(adapter);
 	}
 

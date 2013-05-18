@@ -4,49 +4,61 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:padding="5dip" >
- 
-    <LinearLayout android:id="@+id/thumbnail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="3dip"
-        android:layout_alignParentLeft="true"
-        android:layout_marginRight="5dip">
- 
-        <ImageView
-            android:id="@+id/list_image"
-            android:layout_width="50dip"
-            android:layout_height="50dip"
-            android:src="@drawable/blank_face"/>
- 
-    </LinearLayout>
- 
+
+    <ImageView
+        android:id="@+id/list_image"
+        android:layout_width="75dip"
+        android:layout_height="75dip"
+        android:layout_alignLeft="@+id/name"
+        android:layout_below="@+id/name"
+        android:paddingRight="@dimen/s"
+        android:src="@drawable/blank_face" />
+
     <TextView
-        android:id="@+id/title"
+        android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/thumbnail"
-        android:layout_toRightOf="@+id/thumbnail"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
         android:text="Name"
         android:textColor="#040404"
-        android:typeface="sans"
         android:textSize="15dip"
-        android:textStyle="bold"/>
+        android:textStyle="bold"
+        android:typeface="sans" />
 
     <Spinner
-        android:id="@+id/spinner1"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignBottom="@+id/thumbnail"
-        android:layout_alignLeft="@+id/title"
-        android:layout_below="@+id/title"
-        android:layout_toLeftOf="@+id/toggleButton1" />
+        android:id="@+id/spinner4"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:layout_alignBottom="@+id/list_image"
+        android:layout_alignLeft="@+id/spinner3"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/textView2" />
 
-    <ToggleButton
-        android:id="@+id/toggleButton1"
+    <Spinner
+        android:id="@+id/spinner3"
+        android:layout_width="wrap_content"
+        android:layout_height="38dp"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/name"
+        android:layout_toRightOf="@+id/textView1" />
+
+    <TextView
+        android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/spinner1"
-        android:layout_alignParentRight="true"
-        android:text="ToggleButton" />
+        android:layout_alignBottom="@+id/spinner3"
+        android:layout_alignLeft="@+id/textView2"
+        android:layout_alignTop="@+id/spinner3"
+        android:text="Action" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView1"
+        android:layout_toRightOf="@+id/list_image"
+        android:text="Group" />
  
 </RelativeLayout>

@@ -59,7 +59,7 @@ public class Login extends AsyncTask<Object, Object, Object>{
 		client = new Socket();
 		
 		try {
-			SocketAddress remoteAddr = new InetSocketAddress("192.168.100.5", 8080);
+			SocketAddress remoteAddr = new InetSocketAddress("192.168.100.6", 8080);
 			client.connect(remoteAddr, 8000);
 		} catch (SocketTimeoutException e) {
 			try {

@@ -17,7 +17,8 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name="com.example.letmeinapp.Main"
-            android:label="@string/app_name" >
+            android:label="@string/app_name" 
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -25,10 +26,16 @@
             </intent-filter>
         </activity>
         
-        <activity android:name="com.example.letmeinapp.HomeScreen"/>
-        <activity android:name="com.example.letmeinapp.MyDoor"/>
-        <activity android:name="com.example.letmeinapp.MyLists"/>
-        <activity android:name="com.example.letmeinapp.SignUp"/>
+        <activity android:name="com.example.letmeinapp.HomeScreen"
+            android:screenOrientation="portrait"/>
+        <activity android:name="com.example.letmeinapp.MyDoor"
+            android:screenOrientation="portrait"/>
+        <activity android:name="com.example.letmeinapp.MyLists"
+            android:screenOrientation="portrait"/>
+        <activity android:name="com.example.letmeinapp.SignUp"
+            android:screenOrientation="portrait"/>
+        <activity android:name="com.example.letmeinapp.AddNewToList"
+            android:screenOrientation="portrait"/>
     </application>
     
     
