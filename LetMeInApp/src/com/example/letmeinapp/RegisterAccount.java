@@ -48,7 +48,7 @@ public class RegisterAccount extends AsyncTask<Object, Object, Object> {
 		client = new Socket();
 		
 		try {
-			SocketAddress remoteAddr = new InetSocketAddress("192.168.1.178", 8080);
+			SocketAddress remoteAddr = new InetSocketAddress("192.168.1.178", 55555);
 			client.connect(remoteAddr, 8000);
 		} catch (Exception e) {
 			try {

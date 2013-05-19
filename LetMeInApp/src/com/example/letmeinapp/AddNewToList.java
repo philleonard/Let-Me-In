@@ -16,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 /**
@@ -27,12 +28,17 @@ public class AddNewToList extends Activity {
 	ImageView photoTaken;
 	Bitmap photo;
 	SharedPreferences settings;
+	ProgressBar prog;
 	TextView errorText;
+	Button addNew; 
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.add_new);
 		
+		prog = (ProgressBar) findViewById(R.id.addNewProg);
+		prog.setVisibility(View.INVISIBLE);
 		photoTaken = (ImageView) findViewById(R.id.photo);
 		final EditText nameText = (EditText) findViewById(R.id.nameText);
 		Button takePhoto = (Button) findViewById(R.id.takePhoto);
@@ -61,19 +67,25 @@ public class AddNewToList extends Activity {
 		
 		errorText = (TextView) findViewById(R.id.errorText);
 		errorText.setTextColor(Color.RED);
-		Button addNew = (Button) findViewById(R.id.addNewButton);
+		addNew = (Button) findViewById(R.id.addNewButton);
 		addNew.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
+				errorText.setText("");
 				String name = nameText.getText().toString();
 				String groupStr = group.getSelectedItem().toString();
 				String actionStr = action.getSelectedItem().toString();
 				settings = getSharedPreferences("settings", MODE_WORLD_READABLE);
 				String username = settings.getString("uname", "");
-				
-				AsyncTask<Object, Object, Object> sn = new SendNew(AddNewToList.this, name, groupStr, actionStr, photo, username).execute();
-				
+				if (!(photo == null)) {
+					prog.setVisibility(View.VISIBLE);
+					addNew.setVisibility(View.INVISIBLE);
+					AsyncTask<Object, Object, Object> sn = new SendNew(AddNewToList.this, name, groupStr, actionStr, photo, username).execute();
+				}
+				else {
+					errorText.setText("No picture taken");
+				}
 			}
 		});
 	
@@ -86,4 +98,10 @@ public class AddNewToList extends Activity {
         }  
     } 
 	
+	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
+		startActivity(new Intent(getApplicationContext(), MyLists.class));
+		finish();
+	}
 }

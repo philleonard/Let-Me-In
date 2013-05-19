@@ -63,7 +63,7 @@ public class FacialRecog implements Runnable {
 				
 			} 
 				try {
-					Thread.sleep(1000);
+					Thread.sleep(5000);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}

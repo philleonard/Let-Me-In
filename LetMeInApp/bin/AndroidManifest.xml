@@ -36,6 +36,8 @@
             android:screenOrientation="portrait"/>
         <activity android:name="com.example.letmeinapp.AddNewToList"
             android:screenOrientation="portrait"/>
+         <activity android:name="com.example.letmeinapp.AtTheDoor"
+            android:screenOrientation="portrait"/>
     </application>
     
     

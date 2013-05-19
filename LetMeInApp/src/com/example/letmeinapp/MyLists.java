@@ -58,14 +58,7 @@ public class MyLists extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				//send itemList
-				for (int i = 0; i < itemList.size(); i++) {
-					Item thisRow = itemList.get(i);
-					System.out.println(thisRow.getName());
-					System.out.println(thisRow.getAction());
-					System.out.println(thisRow.getGroup());
-				}
-				
+				AsyncTask<Object, Object, Object> mc = new MakeChanges(itemList, loadSaved()).execute();			
 				finish();
 			}
 		});
@@ -82,5 +75,10 @@ public class MyLists extends Activity {
 		
 	} 
 	
+	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
+		finish();
+	}
 	
 }

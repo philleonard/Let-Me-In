@@ -51,7 +51,7 @@ public class GetList extends AsyncTask<Object, Object, Object> implements Serial
 		
 		client = new Socket();
 	
-		connect(8080);
+		connect(55555);
 		
 		DataOutputStream out;
 		try {
@@ -77,7 +77,7 @@ public class GetList extends AsyncTask<Object, Object, Object> implements Serial
 		
 		for (int i = 0; i < size; i++) {
 			
-			connect(8181);
+			connect(55556);
 			newDIS();
 		
 			Bitmap face = null;
@@ -103,7 +103,7 @@ public class GetList extends AsyncTask<Object, Object, Object> implements Serial
 			System.out.println(defaultAction);
 		}
 		
-		MyArrayAdapter adapter = new MyArrayAdapter(myLists, R.layout.my_list_item, itemList);
+		MyArrayAdapter adapter = new MyArrayAdapter(myLists, R.layout.my_list_item, itemList, user);
 		
 		try {
 			client.close();

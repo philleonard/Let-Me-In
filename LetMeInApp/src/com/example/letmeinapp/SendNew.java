@@ -15,6 +15,7 @@ import javax.imageio.ImageIO;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
+import android.view.View;
 /**
  * @author Philip Leonard
  */
@@ -27,6 +28,7 @@ public class SendNew extends  AsyncTask<Object, Object, Object>{
 	boolean accepted = false;
 	AddNewToList addNewToList;
 	String username;
+	int error = 0;
 	
 	final int APP = 1;
 	final int ADDLIST = 3;
@@ -44,7 +46,7 @@ public class SendNew extends  AsyncTask<Object, Object, Object>{
 	protected Object doInBackground(Object... params) {
 		client = new Socket();
 		try {
-			SocketAddress remoteAddr = new InetSocketAddress("192.168.100.6", 8080);
+			SocketAddress remoteAddr = new InetSocketAddress("192.168.100.6", 55555);
 			client.connect(remoteAddr, 8000);
 		} catch (SocketTimeoutException e) {
 			try {
@@ -53,14 +55,17 @@ public class SendNew extends  AsyncTask<Object, Object, Object>{
 				e1.printStackTrace();
 			}
 			e.printStackTrace();
+			error = 1;
 			cancel(isCancelled());
 		} catch (IOException e) {
 			e.printStackTrace();
+			error = 1;
 			cancel(isCancelled());
 		}
 		try {
 			client.setKeepAlive(true);
 		} catch (SocketException e2) {
+			error = 1;
 			e2.printStackTrace();
 		}
 		
@@ -79,8 +84,9 @@ public class SendNew extends  AsyncTask<Object, Object, Object>{
 			byte[] photoByteArray = stream.toByteArray();
 			out.writeInt(photoByteArray.length);
 			out.write(photoByteArray);
-			out.close();
+			client.shutdownOutput();
 		} catch (IOException e) {
+			error = 1;
 			e.printStackTrace();
 			cancel(isCancelled());
 		}
@@ -89,8 +95,10 @@ public class SendNew extends  AsyncTask<Object, Object, Object>{
 		try {
 			in = new DataInputStream(client.getInputStream());
 			accepted = in.readBoolean();
+			in.close();
 		} catch (IOException e) {
 			e.printStackTrace();
+			error = 1;
 			cancel(isCancelled());
 		}
 		
@@ -107,6 +115,23 @@ public class SendNew extends  AsyncTask<Object, Object, Object>{
 		else {
 			addNewToList.errorText.setText("No faces detected in photo. Try again.");
 		}
+		resetVis();
+	}
+	
+	@Override
+	protected void onCancelled() {
+		super.onCancelled();
+		resetVis();
+		if (error > 0) 
+			addNewToList.errorText.setText("Error connectiong to server");
+		else 
+			addNewToList.errorText.setText("Unexpected error");
+	}
+
+	private void resetVis() {
+		addNewToList.prog.setVisibility(View.INVISIBLE);
+		addNewToList.addNew.setVisibility(View.VISIBLE);
+		
 	}
 
 }

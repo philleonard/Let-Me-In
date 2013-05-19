@@ -7,10 +7,10 @@ import javax.imageio.ImageIO;
  * @author James
  */
 public class SendAndRecv {
-	public int sendToServ (IplImage image, String username, String password) {
+	public int sendToServ (IplImage image, String username) {
 		//Send image to server, return 0 if success, -1 else
-		String serverName = "127.0.0.1";
-	    int port = 8080;
+		String serverName = "192.168.100.6";
+	    int port = 55555;
 	    try {
 	    	    	
 		    System.out.println("Connecting to: " + serverName + "Port: " + port);
@@ -18,11 +18,11 @@ public class SendAndRecv {
 		    System.out.println("Connected to: " + client.getRemoteSocketAddress());
 		    OutputStream outToServer = client.getOutputStream();
 		    DataOutputStream dataOut = new DataOutputStream(client.getOutputStream());
+		    dataOut.writeInt(0);
+		    dataOut.writeInt(2);
 		    System.out.println("Attempting to send username");
 		    dataOut.writeUTF(username);
 		    System.out.println("username Sent");
-		    dataOut.writeUTF(password);
-		    System.out.println("pass Sent");
 		    dataOut.flush();
 		    System.out.println("Attempting img send");
 		    BufferedImage buferedimg = image.getBufferedImage();

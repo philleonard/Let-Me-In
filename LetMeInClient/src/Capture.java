@@ -32,11 +32,9 @@ public class Capture implements Runnable {
 	}
 
 	public void run() {
-        int i=0;
         try {
             IplImage image, newImage;
             System.out.println("FaceRecogModule: Gathering face images");
-            //while (i < 4) {
             	newImage = null;
                 image = grabber.grab();
                 clientHome.resetFaces();
@@ -70,13 +68,10 @@ public class Capture implements Runnable {
     						clientHome.setFace6(face);
     					
     					SendAndRecv sendImage = new SendAndRecv();
-              			sendImage.sendToServ(newImage, "username", "password");
+              			sendImage.sendToServ(newImage, clientHome.uname);
     				}
                     
                 }
-                //Thread.sleep(500);
-                i++;
-            //}
         
         } catch (Exception e) {
         	System.out.println("FaceRecogModule: Capture failed");

@@ -23,6 +23,9 @@ public class HomeScreen extends Activity {
 			super.onCreate(savedInstanceState);
 			setContentView(R.layout.home_page);
 			
+			Thread serverListen = new Thread(new ListenForNotification(this));
+			serverListen.start();
+			
 			Button myDoorButton = (Button) findViewById(R.id.MyDoorButton);
 			Button myListsButton = (Button) findViewById(R.id.MyListsButton);
 			Button signoutButton = (Button) findViewById(R.id.SignoutButton);
@@ -53,7 +56,7 @@ public class HomeScreen extends Activity {
 				}
 			});
 		}
-		
+
 		@Override
 		public void onBackPressed() {
 			super.onBackPressed();
