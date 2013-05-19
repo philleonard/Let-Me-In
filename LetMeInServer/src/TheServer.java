@@ -5,5 +5,8 @@ public class TheServer extends Thread {
 		Thread t = new Thread(new ListeningClass()); //listens on port 8080
 		t.start();
 		
+		
+		
+		
 	}
 }
