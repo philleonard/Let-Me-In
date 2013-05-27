@@ -37,7 +37,8 @@ public class FacialRecognition {
         
         FilenameFilter pngFilter = new FilenameFilter() {
             public boolean accept(File dir, String name) {
-                return name.toLowerCase().endsWith(".png");
+                //return name.toLowerCase().endsWith(".png");
+            	return name.toLowerCase().endsWith(".bmp");
             }
         };
 
@@ -96,7 +97,7 @@ public class FacialRecognition {
             int name = prediction[0];
             double confidence1 = 100*(THRESHHOLD - confidence[0])/THRESHHOLD;
             double confidence2 = confidence[0];
-            System.out.println("Name: " + name + "\nConfidence: " + confidence1 + "\nConfidence 2: " + confidence2);
+            //System.out.println("Name: " + name + "\nConfidence: " + confidence1 + "\nConfidence 2: " + confidence2);
           }
 
         System.out.println("Predicted Picture ID: " + predictedLabel);

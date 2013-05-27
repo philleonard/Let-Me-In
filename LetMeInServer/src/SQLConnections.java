@@ -23,7 +23,7 @@ public class SQLConnections implements Serializable{
 	private static PreparedStatement ps = null;
 
 	private static Connection connect(){
-		System.out.println("MySQL Connect Example.");
+		//System.out.println("MySQL Connect Example.");
 		Connection conn = null;
 		String url = "jdbc:mysql://localhost:1337/";
 		String dbName = "facerecsch";
@@ -34,7 +34,7 @@ public class SQLConnections implements Serializable{
 		try {
 			Class.forName(driver).newInstance();
 			conn = DriverManager.getConnection(url+dbName,userName,password);
-			System.out.println("Connected to the database");
+			//System.out.println("Connected to the database");
 			return conn;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -62,6 +62,8 @@ public class SQLConnections implements Serializable{
 			e.printStackTrace();
 		}
 	}
+	
+	
 
 	public static PictureData[] getPhotos(String userID, int noOfPhotos){
 		PictureData[] allPicData = new PictureData[noOfPhotos];
@@ -84,7 +86,7 @@ public class SQLConnections implements Serializable{
 						System.out.println("Image Finder Error");
 					}
 					
-					PictureData aPicture = new PictureData(rs.getString("name"), rs.getString("defaultaction"), rs.getString("group"), img);
+					PictureData aPicture = new PictureData(rs.getString("personname"), rs.getString("defaultaction"), rs.getString("persongroup"), img);
 					allPicData[i] = aPicture;
 					
 					i++;
@@ -96,6 +98,30 @@ public class SQLConnections implements Serializable{
 		}
 		disconnect(conn);
 		return allPicData;
+	}
+	
+	public static String getPhoneIP(String userID){
+		String phoneIP = null;
+		Connection conn = connect();
+		if (conn == null) {
+			System.out.println("NULL");
+		}
+		else {
+			String query = "SELECT phoneip FROM users WHERE userid = \"" + userID + "\"";
+			try {
+				statement = conn.createStatement();
+				rs = statement.executeQuery(query);
+				while (rs.next()) {
+					phoneIP = rs.getString("phoneip");
+					System.out.println("Phone IP of user " + userID + " is " + phoneIP);
+				}
+			} catch (SQLException e ) {} 
+		}
+		disconnect(conn);
+		
+		
+		return phoneIP;
+		
 	}
 
 	public static int getNoPhotos(String userID){
@@ -141,18 +167,19 @@ public class SQLConnections implements Serializable{
 	}
 
 	public static String getPicNameFromId(int picID){
+		System.out.println("PICID to Identify: " + picID);
 		String picName = null;
 		Connection conn = connect();
 		if (conn == null) {
 			System.out.println("NULL");
 		}
 		else {
-			String query = "SELECT name FROM photos WHERE photoid = \""+picID+"\"";
+			String query = "SELECT personname FROM photos WHERE photoid = \""+picID+"\"";
 			try {
 				statement = conn.createStatement();
 				rs = statement.executeQuery(query);
 				while (rs.next()) {
-					picName = rs.getString("name");
+					picName = rs.getString("personname");
 					System.out.println(picName);
 				}
 			} catch (SQLException e ) {} 
@@ -161,71 +188,84 @@ public class SQLConnections implements Serializable{
 		disconnect(conn);
 		return picName;
 	}
-
-	/*public static String[] getPicsAndIDs (int userid) throws Exception {
-	  Connection conn = connect();
-	  String[] addList = null;
-	  if (conn == null) {
-		  System.out.println("NULL");
-	  }
-	  else {
-		  List<String> myList = new ArrayList<String>(); 
-		  String query = "SELECT location FROM photos WHERE userid = "+userid;
-		  try {
-			  Boolean results = false;
-			  statement = conn.createStatement();
-			  rs = statement.executeQuery(query);
-			  while (rs.next()) {
-				  String location = rs.getString("location");
-				  myList.add(location);
-				  System.out.println(location);
-				  results = true;
-			  }
-			  if (!results){
-				 myList.add("0"); 
-			  }
-			  addList = (String[]) myList.toArray();
-		  } catch (SQLException e ) {} 
-
-	  }
-	  disconnect(conn);
-	  return addList;
-  }*/
-
-	//save actual photo first
-	public static int addPicture(String userID, String name, String location, String defAct, String group) {
+	
+	public static boolean getNotify(int picID){
+		boolean notify = false;
 		Connection conn = connect();
-		int success = 0;
+		if (conn == null) {
+			System.out.println("NULL");
+		}
+		else {
+			String query = "SELECT defaultaction FROM photos WHERE photoid = \""+picID+"\"";
+			try {
+				statement = conn.createStatement();
+				rs = statement.executeQuery(query);
+				while (rs.next()) {
+					if (rs.getString("defaultaction").equals("Notify me")){
+						notify = true;
+					}
+				}
+			} catch (SQLException e ) {} 
+
+		}
+		disconnect(conn);
+		return notify;
+	}
+
+	
+
+	public static void addPicture(String userID, String name, String defAct, String group, BufferedImage newPhoto) {
+		Connection conn = connect();
 		if (conn == null) {
 			System.out.println("NULL");
 		}
 		else {
 			try {
-				ps = conn.prepareStatement("INSERT into photos (userid, name, location, defaultaction, group) VALUES (?, ?, ?, ?, ?)");
+				ps = conn.prepareStatement("INSERT into photos (userid, personname, location, defaultaction, persongroup) VALUES (?, ?, ?, ?, ?)");
 				ps.setString(1, userID);
 				ps.setString(2, name);
-				ps.setString(3, location);
+				ps.setString(3, "temp");
 				ps.setString(4, defAct);
 				ps.setString(5, group);
 				ps.addBatch();
 				ps.executeBatch();
 				System.out.println("Photo Added");
-				success=1;
-			} catch (SQLException e ) {
+				
+				String query = "SELECT photoid FROM photos WHERE personname = \""+name+"\" and userid = \"" + userID + "\"";
+			
+				statement = conn.createStatement();
+				rs = statement.executeQuery(query);
+				int picID = 0;
+				while (rs.next()) {
+					picID = Integer.parseInt(rs.getString("photoid"));
+				}
+				 
+	            File outputfile = new File("Photos/" + userID + "/" + picID + ".bmp");
+	            ImageIO.write(newPhoto, "PNG", outputfile);
+			      
+	            ps = conn.prepareStatement("UPDATE photos SET location = ? WHERE photoid = ?");
+				ps.setString(1, "Photos/" + userID + "/" + picID + ".bmp");
+				ps.setString(2, Integer.toString(picID));
+				ps.addBatch();
+				ps.executeBatch();
+				
+	            
+	            
+				
+			} catch (SQLException | IOException e ) {
 				e.printStackTrace();
 			} 
 		}
 		disconnect(conn);
-		return success;
 	}
 
-	public static int removePicture(String userID, String name) {
+	public static void removePicture(String userID, String name) {
 		Connection conn = connect();
 		if (conn == null) {
 			System.out.println("NULL");
 		}
 		else {
-			String query = "SELECT location FROM photos WHERE userid = \"" + userID + "\" and name = \"" + name + "\"";
+			String query = "SELECT location FROM photos WHERE userid = \"" + userID + "\" and personname = \"" + name + "\"";
 			try {
 				statement = conn.createStatement();
 				rs = statement.executeQuery(query);
@@ -233,17 +273,49 @@ public class SQLConnections implements Serializable{
 					String location = rs.getString("location");
 					File ftd = new File(location);
 					ftd.delete();
+					System.out.println("Photo File Deleted");
 				}
-
+				
+				ps = conn.prepareStatement("DELETE from photos WHERE userid = ? and personname = ?");
+				ps.setString(1, userID);
+				ps.setString(2, name);
+				ps.addBatch();
+				ps.executeBatch();
+				System.out.println("Photo Data Deleted from Database");
 
 
 			} catch (SQLException e ) {} 
 		}
 		disconnect(conn);
-		return 0;
+	}
+	
+	public static void changePhotos(String userID, PictureData[] newPicData){
+		Connection conn = connect();
+		int i = 0;
+		if (conn == null) {
+			System.out.println("NULL");
+		}
+		else {
+			String query = "SELECT * FROM photos WHERE userid = \"" + userID + "\"";
+			try {
+				statement = conn.createStatement();
+				rs = statement.executeQuery(query);
+				while (rs.next()) {
+					ps = conn.prepareStatement("UPDATE photos SET name = ?, persongroup = ?, defaultaction = ? WHERE photoid = ?");
+					ps.setString(1, newPicData[i].name);
+					ps.setString(2, newPicData[i].group);
+					ps.setString(3, newPicData[i].defaultaction);
+					ps.setString(4, rs.getString("photoid"));
+					ps.addBatch();
+					i++;
+				}
+				ps.executeBatch();
+
+			} catch (SQLException e ) {} 
+		}
+		disconnect(conn);
 	}
 
-	//needs full testing, not yet tested
 	public static int loginAuthentication (String username, String password, String ipAddress, int identifier){
 		//identify 0 = client, 1 = phone
 		Connection conn = connect();
@@ -289,7 +361,7 @@ public class SQLConnections implements Serializable{
 					}//endif password check
 					else {
 						result = 2;
-						System.out.println("Esle result 2");
+						System.out.println("Else result 2");
 
 					}
 				}//endif rs.next
@@ -376,8 +448,11 @@ public class SQLConnections implements Serializable{
 		//System.out.println(getPicNameFromId(1));
 		//System.out.println(getNoPhotos(getIDFromUsername("phil")));
 		//File outputfile = new File("Photos/userid/photoID.png");
-		getPhotos("1", 2);
-
+		//getPhotos("1", 2);
+		//getPhoneIP("1");
+		getPicNameFromId(7);
 	}
+
+	
 
 }

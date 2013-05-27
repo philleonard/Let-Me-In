@@ -18,7 +18,7 @@ public class ListeningClass implements Runnable {
 	private static ServerSocket listeningSocket;
 
 	public void run(){
-		   int clientport = 8080;
+		   int clientport = 55555;
 		   try {
 	    	 listeningSocket = new ServerSocket(clientport);
 	         listeningSocket.setSoTimeout(0);
