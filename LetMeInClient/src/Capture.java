@@ -45,7 +45,10 @@ public class Capture implements Runnable {
     				cvClearMemStorage(storage);
     				
     				int numberFaces = sign.total();
-    		
+    				
+    				clientHome.getConsole().append(clientHome.console() + numberFaces + " faces detected \n");
+    				
+    				Object[] imageArray = new Object[numberFaces];
     				for (int x = 0; x < numberFaces; x++) {
     					CvRect r = new CvRect(cvGetSeqElem(sign, x));
     					cvSetImageROI(image, r);
@@ -67,9 +70,14 @@ public class Capture implements Runnable {
     					if (x == 5)
     						clientHome.setFace6(face);
     					
-    					SendAndRecv sendImage = new SendAndRecv();
-              			sendImage.sendToServ(newImage, clientHome.uname);
+    					imageArray[x] = newImage;
+    					
     				}
+    				
+    				clientHome.getConsole().append(clientHome.console() + "Sending image data to server for recognition...\n");
+    				
+    				SendAndRecv sendImage = new SendAndRecv();
+          			sendImage.sendToServ(imageArray, clientHome.uname);
                     
                 }
         

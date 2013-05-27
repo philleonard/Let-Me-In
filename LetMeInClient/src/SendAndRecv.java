@@ -7,7 +7,7 @@ import javax.imageio.ImageIO;
  * @author James
  */
 public class SendAndRecv {
-	public int sendToServ (IplImage image, String username) {
+	public int sendToServ (Object[] imageArray, String username) {
 		//Send image to server, return 0 if success, -1 else
 		String serverName = "192.168.100.6";
 	    int port = 55555;
@@ -25,9 +25,14 @@ public class SendAndRecv {
 		    System.out.println("username Sent");
 		    dataOut.flush();
 		    System.out.println("Attempting img send");
-		    BufferedImage buferedimg = image.getBufferedImage();
-		    ImageIO.write(buferedimg, "JPG", outToServer);
-		    System.out.println("Image Sent");
+		    
+		    dataOut.writeInt(imageArray.length);
+		    for (int f = 0; f < imageArray.length; f++) {
+		    	BufferedImage image = ((IplImage) imageArray[f]).getBufferedImage();
+			    ImageIO.write(image, "JPG", outToServer);
+		    }
+		    
+		    System.out.println("Image(s) Sent");
 		    client.close();
 		    System.out.println("Connection Closed");
 	    	

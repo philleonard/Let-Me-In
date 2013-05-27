@@ -49,6 +49,7 @@ import java.util.TimerTask;
 
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
+import javax.swing.JSeparator;
 /**
  * @author Philip Leonard
  */
@@ -73,6 +74,9 @@ public class ClientHome extends JFrame implements ActionListener, WindowListener
 	private JLabel lblMemoryUsage;
 	private JLabel lblThreads;
 	private JLabel lblUptime;
+	private JLabel facesText;
+	private JLabel actionText;
+	private TextArea console;
 	
 	public ClientHome(final String uname) {
 		super("Let Me In Client Control");
@@ -99,10 +103,10 @@ public class ClientHome extends JFrame implements ActionListener, WindowListener
 		gbc_panel_1.gridy = 0;
 		contentPane.add(panel_1, gbc_panel_1);
 		GridBagLayout gbl_panel_1 = new GridBagLayout();
-		gbl_panel_1.columnWidths = new int[]{0, 0};
-		gbl_panel_1.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0};
-		gbl_panel_1.columnWeights = new double[]{0.0, Double.MIN_VALUE};
-		gbl_panel_1.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_panel_1.columnWidths = new int[]{0, 0, 0, 0, 0, 0, 0};
+		gbl_panel_1.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+		gbl_panel_1.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_panel_1.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		panel_1.setLayout(gbl_panel_1);
 		
 		lblUsername = new JLabel("Signed in as: ");
@@ -110,7 +114,7 @@ public class ClientHome extends JFrame implements ActionListener, WindowListener
 		lblUsername.setFont(new Font("Calibri", Font.BOLD, 13));
 		GridBagConstraints gbc_lblUsername = new GridBagConstraints();
 		gbc_lblUsername.anchor = GridBagConstraints.WEST;
-		gbc_lblUsername.insets = new Insets(0, 0, 5, 0);
+		gbc_lblUsername.insets = new Insets(0, 0, 5, 5);
 		gbc_lblUsername.gridx = 0;
 		gbc_lblUsername.gridy = 0;
 		panel_1.add(lblUsername, gbc_lblUsername);
@@ -119,9 +123,9 @@ public class ClientHome extends JFrame implements ActionListener, WindowListener
 		lblUptime.setFont(new Font("Calibri", Font.PLAIN, 13));
 		GridBagConstraints gbc_lblUptime = new GridBagConstraints();
 		gbc_lblUptime.anchor = GridBagConstraints.WEST;
-		gbc_lblUptime.insets = new Insets(0, 0, 5, 0);
+		gbc_lblUptime.insets = new Insets(0, 0, 5, 5);
 		gbc_lblUptime.gridx = 0;
-		gbc_lblUptime.gridy = 3;
+		gbc_lblUptime.gridy = 1;
 		panel_1.add(lblUptime, gbc_lblUptime);
 		
 		lblCpuUsage = new JLabel("CPU usage:");
@@ -129,9 +133,9 @@ public class ClientHome extends JFrame implements ActionListener, WindowListener
 		lblCpuUsage.setHorizontalAlignment(SwingConstants.LEFT);
 		GridBagConstraints gbc_lblCpuUsage = new GridBagConstraints();
 		gbc_lblCpuUsage.anchor = GridBagConstraints.WEST;
-		gbc_lblCpuUsage.insets = new Insets(0, 0, 5, 0);
+		gbc_lblCpuUsage.insets = new Insets(0, 0, 5, 5);
 		gbc_lblCpuUsage.gridx = 0;
-		gbc_lblCpuUsage.gridy = 4;
+		gbc_lblCpuUsage.gridy = 2;
 		panel_1.add(lblCpuUsage, gbc_lblCpuUsage);
 		
 		lblMemoryUsage = new JLabel("Memory usage:");
@@ -139,18 +143,35 @@ public class ClientHome extends JFrame implements ActionListener, WindowListener
 		lblMemoryUsage.setHorizontalAlignment(SwingConstants.LEFT);
 		GridBagConstraints gbc_lblMemoryUsage = new GridBagConstraints();
 		gbc_lblMemoryUsage.anchor = GridBagConstraints.WEST;
-		gbc_lblMemoryUsage.insets = new Insets(0, 0, 5, 0);
+		gbc_lblMemoryUsage.insets = new Insets(0, 0, 5, 5);
 		gbc_lblMemoryUsage.gridx = 0;
-		gbc_lblMemoryUsage.gridy = 5;
+		gbc_lblMemoryUsage.gridy = 3;
 		panel_1.add(lblMemoryUsage, gbc_lblMemoryUsage);
 		
 		lblThreads = new JLabel("Threads: ");
 		lblThreads.setFont(new Font("Calibri", Font.PLAIN, 13));
 		GridBagConstraints gbc_lblThreads = new GridBagConstraints();
+		gbc_lblThreads.insets = new Insets(0, 0, 5, 5);
 		gbc_lblThreads.anchor = GridBagConstraints.WEST;
 		gbc_lblThreads.gridx = 0;
-		gbc_lblThreads.gridy = 6;
+		gbc_lblThreads.gridy = 4;
 		panel_1.add(lblThreads, gbc_lblThreads);
+		
+		setFacesText(new JLabel("Recognised: "));
+		GridBagConstraints gbc_facesText = new GridBagConstraints();
+		gbc_facesText.anchor = GridBagConstraints.WEST;
+		gbc_facesText.insets = new Insets(0, 0, 5, 5);
+		gbc_facesText.gridx = 0;
+		gbc_facesText.gridy = 7;
+		panel_1.add(getFacesText(), gbc_facesText);
+		
+		setActionText(new JLabel("STATUS: DOOR CLOSED"));
+		getActionText().setForeground(Color.RED);
+		GridBagConstraints gbc_actionText = new GridBagConstraints();
+		gbc_actionText.insets = new Insets(0, 0, 0, 5);
+		gbc_actionText.gridx = 0;
+		gbc_actionText.gridy = 8;
+		panel_1.add(getActionText(), gbc_actionText);
 		
 		panel = new panel(this);
 		panel.setBorder(new TitledBorder(new LineBorder(new Color(0, 0, 0)), "Live Image", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -171,12 +192,12 @@ public class ClientHome extends JFrame implements ActionListener, WindowListener
 		contentPane.add(panel_2, gbc_panel_2);
 		panel_2.setLayout(new CardLayout(0, 0));
 	
-		TextArea textArea = new TextArea(console() + "Welcome to Let Me In Client v" + VERSIONCODE + "\n", 0, 0, 3);
-		textArea.setEditable(false);
-		textArea.setBackground(Color.BLACK);
-		textArea.setForeground(Color.GREEN);
-		textArea.setFont(new Font("Calibri", Font.PLAIN, 12));
-		panel_2.add(textArea, "name_17937718646748");
+		setConsole(new TextArea(console() + "Welcome to Let Me In Client v" + VERSIONCODE + "\n", 0, 0, 3));
+		getConsole().setEditable(false);
+		getConsole().setBackground(Color.BLACK);
+		getConsole().setForeground(Color.GREEN);
+		getConsole().setFont(new Font("Calibri", Font.PLAIN, 12));
+		panel_2.add(getConsole(), "name_17937718646748");
 		
 		JPanel panel_3 = new JPanel();
 		panel_3.setBorder(new TitledBorder(new LineBorder(new Color(0, 0, 0)), "Faces", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -311,7 +332,7 @@ public class ClientHome extends JFrame implements ActionListener, WindowListener
         fr.start();
 	}
 	
-	private String console() {
+	String console() {
 		String prefix = "[" + uname + "@lmi ~]$ ";
 		return prefix;
 	}
@@ -517,6 +538,30 @@ public class ClientHome extends JFrame implements ActionListener, WindowListener
 			panel_8.repaint();
 			panel_9.repaint();
 	
+	}
+
+	public JLabel getActionText() {
+		return actionText;
+	}
+
+	public void setActionText(JLabel actionText) {
+		this.actionText = actionText;
+	}
+
+	public JLabel getFacesText() {
+		return facesText;
+	}
+
+	public void setFacesText(JLabel facesText) {
+		this.facesText = facesText;
+	}
+
+	public TextArea getConsole() {
+		return console;
+	}
+
+	public void setConsole(TextArea console) {
+		this.console = console;
 	}
 }
 

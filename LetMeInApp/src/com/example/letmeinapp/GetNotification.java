@@ -40,37 +40,17 @@ public class GetNotification implements Runnable {
 			return;
 		}
 		
-
-		NotificationCompat.Builder mBuilder =
-		        new NotificationCompat.Builder(homeScreen)
-		        .setSmallIcon(R.drawable.ic_launcher)
-		        .setContentTitle(name + " is at your door")
-		        .setLargeIcon(face)
-		        .setContentText("Click here to respond");
-		// Creates an explicit intent for an Activity in your app
+		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(homeScreen).setSmallIcon(R.drawable.ic_launcher).setContentTitle(name + " is at your door").setLargeIcon(face).setContentText("Click here to respond");
 		Intent resultIntent = new Intent(homeScreen, AtTheDoor.class);
 		resultIntent.putExtra("name", name);
 		resultIntent.putExtra("face", face);
-
-		// The stack builder object will contain an artificial back stack for the
-		// started Activity.
-		// This ensures that navigating backward from the Activity leads out of
-		// your application to the Home screen.
 		TaskStackBuilder stackBuilder = TaskStackBuilder.create(homeScreen);
-		// Adds the back stack for the Intent (but not the Intent itself)
 		stackBuilder.addParentStack(HomeScreen.class);
-		// Adds the Intent that starts the Activity to the top of the stack
 		stackBuilder.addNextIntent(resultIntent);
-		PendingIntent resultPendingIntent =
-		        stackBuilder.getPendingIntent(
-		            0,
-		            PendingIntent.FLAG_UPDATE_CURRENT
-		        );
+		PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 		mBuilder.setContentIntent(resultPendingIntent);
-		NotificationManager mNotificationManager =
-		    (NotificationManager) homeScreen.getSystemService(Context.NOTIFICATION_SERVICE);
+		NotificationManager mNotificationManager = (NotificationManager) homeScreen.getSystemService(Context.NOTIFICATION_SERVICE);
 		int mId = 0;
-		// mId allows you to update the notification later on.
 		mNotificationManager.notify(mId , mBuilder.build());
 		
 		

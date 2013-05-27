@@ -21,12 +21,14 @@ public class FacialRecog implements Runnable {
 
 	@Override
 	public void run(){
+		clientHome.getConsole().append(clientHome.console() + "Setting up camera device\n");
 		try {
 			Thread.sleep(1000);
 		} catch (InterruptedException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+		clientHome.getConsole().append(clientHome.console() + "Starting frame grabber\n");
 		try {
 			grab.start();
 		} catch (Exception e) {
@@ -37,11 +39,12 @@ public class FacialRecog implements Runnable {
 		Thread li = new Thread(new LiveImage(clientHome, grab));
 		li.start();
 		
-		Thread md = new Thread(new MyDoor(grab));
+		Thread md = new Thread(new MyDoor(grab, clientHome));
 		md.start();
 		
 		while (true) {
 			if (listen()) {
+				clientHome.getConsole().append(clientHome.console() + "Face(s) detected...\n");
 				Thread cap = new Thread(new Capture(clientHome, grab));
 				cap.start();
 				try {
@@ -52,7 +55,7 @@ public class FacialRecog implements Runnable {
 				}
 				//Wait for capture to return (i.e. to send images)
 				
-				Thread res = new Thread(new Result());
+				Thread res = new Thread(new Result(clientHome));
 				res.start();
 				try {
 					res.join();
@@ -63,7 +66,7 @@ public class FacialRecog implements Runnable {
 				
 			} 
 				try {
-					Thread.sleep(5000);
+					Thread.sleep(1000);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -74,6 +77,7 @@ public class FacialRecog implements Runnable {
 	
 	public static boolean listen() {
 		try {
+			
 			IplImage faceImage;
 			faceImage = grab.grab();
 			if (faceImage != null) {

@@ -16,16 +16,18 @@ import com.googlecode.javacv.cpp.opencv_core.IplImage;
 
 public class MyDoor implements Runnable {
 	
+	ClientHome clientHome;
 	FrameGrabber grab = null;
-	public MyDoor(FrameGrabber grab) {
+	public MyDoor(FrameGrabber grab, ClientHome clientHome) {
 		this.grab = grab;
+		this.clientHome = clientHome;
 	}
 
 	@Override
 	public void run() {
 		ServerSocket serverSocket = null;
 		int port = 8100;
-		
+		clientHome.getConsole().append(clientHome.console() + "Listening for phone connection for live image service\n");
 		System.out.println("MyDoorModule: Starting server socket");
 		try {
 			serverSocket = new ServerSocket(port);
@@ -39,6 +41,7 @@ public class MyDoor implements Runnable {
 			System.out.println("MyDoorModule: Waiting for android connection..");
 			try {
 				clientSocket = serverSocket.accept();
+				clientHome.getConsole().append(clientHome.console() + "Android device connected, streaming live image...\n");
 				System.out.println("MyDoorModule: Connection to android device successfull!");
 				Thread si = new Thread(new sendImage(clientSocket, grab));
 				si.start();		

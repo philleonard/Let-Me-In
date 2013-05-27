@@ -30,7 +30,7 @@ public class LiveImage implements Runnable {
 			BufferedImage clientLive = faceImage.getBufferedImage();
 			clientHome.setImage(clientLive);
 			try {
-				Thread.sleep(500);
+				Thread.sleep(100);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
