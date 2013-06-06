@@ -1,4 +1,3 @@
-package com.example.letmeinapp;
 
 /* Class for centralising the IP and Port of the server
  * If in the future a domain is secured then the methods could
@@ -11,20 +10,10 @@ public class GetAddress {
 
 		return "192.168.100.6";
 	}
-
-	public String client() {
-
-		return "192.168.100.2";
-	}
 	
 	public int serverPort() {
 		
 		return 55555;	
-	}
-
-	public int clientPort() {
-		
-		return 8100;
 	}
 
 }

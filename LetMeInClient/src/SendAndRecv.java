@@ -14,8 +14,9 @@ public class SendAndRecv {
 	 */
 	public int sendToServ (Object[] imageArray, String username) {
 		//Send image to server, return 0 if success, -1 else
-		String serverName = "192.168.1.178";
-	    int port = 55555;
+		GetAddress ga = new GetAddress();
+		String serverName = ga.server();
+	    int port = ga.serverPort();
 	    try {
 	    	    	
 		    System.out.println("Connecting to: " + serverName + "Port: " + port);

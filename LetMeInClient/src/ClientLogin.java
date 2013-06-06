@@ -36,8 +36,9 @@ public class ClientLogin extends Thread{
 		client = new Socket();
 		
 		//Connecting to the server
+		GetAddress ga = new GetAddress();
 		try {
-			SocketAddress remoteAddr = new InetSocketAddress("192.168.1.178", 55555);
+			SocketAddress remoteAddr = new InetSocketAddress(ga.server(), ga.serverPort());
 			client.connect(remoteAddr, 8000);
 		} catch (SocketTimeoutException e) {
 			closeSocket();
