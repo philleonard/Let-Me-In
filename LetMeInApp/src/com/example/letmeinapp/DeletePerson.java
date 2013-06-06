@@ -8,9 +8,12 @@ import java.net.SocketAddress;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 
-import android.content.Intent;
 import android.os.AsyncTask;
 
+/*
+ * This AsyncTask thread sends a command to the server to delete a given name from
+ * the users list.
+ */
 public class DeletePerson extends AsyncTask<Object, Object, Object>{
 
 	Socket client;
@@ -27,8 +30,9 @@ public class DeletePerson extends AsyncTask<Object, Object, Object>{
 	@Override
 	protected Object doInBackground(Object... params) {
 		Socket client = new Socket();
+		GetAddress ga = new GetAddress();
 		try {
-			SocketAddress remoteAddr = new InetSocketAddress("192.168.100.6", 55555);
+			SocketAddress remoteAddr = new InetSocketAddress(ga.server(), ga.serverPort());
 			client.connect(remoteAddr, 8000);
 		} catch (SocketTimeoutException e) {
 			try {

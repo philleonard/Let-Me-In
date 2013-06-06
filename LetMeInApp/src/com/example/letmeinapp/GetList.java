@@ -2,13 +2,10 @@ package com.example.letmeinapp;
 /**
  * @author Philip Leonard
  */
-//import java.awt.image.BufferedImage;
-import java.awt.image.BufferedImage;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.OptionalDataException;
 import java.io.Serializable;
 import java.net.InetSocketAddress;
 import java.net.Socket;
@@ -17,17 +14,16 @@ import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 
-import javax.imageio.ImageIO;
-
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.ListAdapter;
 
+/*
+ * AsyncTask for downloading the users list from the server.
+ * These include images, names, groups and actions for each profile
+ */
 public class GetList extends AsyncTask<Object, Object, Object> implements Serializable {
 	
 	private SharedPreferences settings;
@@ -42,7 +38,6 @@ public class GetList extends AsyncTask<Object, Object, Object> implements Serial
 		this.myLists = myLists;
 	}
 	
-
 	Socket client;
 	DataInputStream in;
 	
@@ -50,8 +45,8 @@ public class GetList extends AsyncTask<Object, Object, Object> implements Serial
 	protected Object doInBackground(Object... arg0) {
 		
 		client = new Socket();
-	
-		connect(55555);
+		GetAddress ga = new GetAddress();
+		connect(ga.serverPort());
 		
 		DataOutputStream out;
 		try {
@@ -75,6 +70,7 @@ public class GetList extends AsyncTask<Object, Object, Object> implements Serial
 		
 		ArrayList<Item> itemList = new ArrayList<Item>();
 		
+		//New non-persistent TCP connection started for profile
 		for (int i = 0; i < size; i++) {
 			
 			connect(55556);
@@ -114,6 +110,7 @@ public class GetList extends AsyncTask<Object, Object, Object> implements Serial
 		return adapter;
 	}
 	
+	//Method for refreshing the data input stream
 	private void newDIS() {
 		in = null;
 		try {
@@ -125,10 +122,12 @@ public class GetList extends AsyncTask<Object, Object, Object> implements Serial
 		
 	}
 
+	//Method for connecting to the server
 	private void connect(int port) {
 		client = new Socket();
+		GetAddress ga = new GetAddress();
 		try {
-			SocketAddress remoteAddr = new InetSocketAddress("192.168.100.6", port);
+			SocketAddress remoteAddr = new InetSocketAddress(ga.server(), port);
 			client.connect(remoteAddr, 8000);
 		} catch (SocketTimeoutException e) {
 			try {
@@ -150,6 +149,7 @@ public class GetList extends AsyncTask<Object, Object, Object> implements Serial
 		
 	}
 
+	//Method for adding data to list
 	private void populateList(Object result) {
 		
 		MyArrayAdapter adapter = (MyArrayAdapter) result;

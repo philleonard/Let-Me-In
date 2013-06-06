@@ -27,6 +27,9 @@ import javax.swing.border.MatteBorder;
 
 public class ClientMain extends JFrame implements ActionListener {
 
+	/*
+	 * GUI class for the initial login and signup page, auto-generated using WindowBuilder Pro
+	 */
 	private JPanel contentPane;
 	private JTextField username;
 	private JPasswordField password;
@@ -66,6 +69,7 @@ public class ClientMain extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		String action = e.getActionCommand();
 		
+		//Clicking the login button verifies that the forms are filled in and starts a thread to verify they are correct
 		if (action.equals("Login")) {
 			getLoginError().setText("");
 			String uname = username.getText();
@@ -93,6 +97,8 @@ public class ClientMain extends JFrame implements ActionListener {
 			cl.start();
 		}
 		
+		//Clicking the signup button verifies that the forms are filled in and that the passwords match.
+		//Then starts a thread to upload the details to the server to create a new account (or respond why if it fails)
 		else if (action.equals("Sign Up")) {
 			getSignupError().setForeground(Color.RED);
 			getSignupError().setText("");
@@ -113,6 +119,7 @@ public class ClientMain extends JFrame implements ActionListener {
 		}	
 	}
 	
+	//Verification for the forms
 	private boolean verify(String newUnameText, String newPassText, String newPassConfText, String newEmailText) {
 		int emptyCount = 0;
 		boolean outcome = true;
@@ -165,6 +172,7 @@ public class ClientMain extends JFrame implements ActionListener {
 		
 	}
 	
+	//Auto-generated GUI code
 	public ClientMain() {
 		super("Let Me In Login");
 		setResizable(false);
@@ -288,6 +296,7 @@ public class ClientMain extends JFrame implements ActionListener {
 		contentPane.add(getSignupProg());
 	}
 
+	//Getters and setters for GUI in other threads and classes
 	public JButton getBtnLogin() {
 		return btnLogin;
 	}

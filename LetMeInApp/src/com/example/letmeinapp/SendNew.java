@@ -1,5 +1,7 @@
 package com.example.letmeinapp;
-
+/**
+ * @author Philip Leonard
+ */
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -10,18 +12,19 @@ import java.net.SocketAddress;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 
-import javax.imageio.ImageIO;
-
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.view.View;
-/**
- * @author Philip Leonard
+
+/*
+ * After the user creates a new member in the AddNewToList activity. This AsyncTask is 
+ * launched to send the information to the server so that the server can add the new 
+ * item in the users list to the database.
  */
 
 public class SendNew extends  AsyncTask<Object, Object, Object>{
-
+	
 	String name, groupStr, actionStr;
 	Bitmap photo;
 	Socket client;
@@ -45,8 +48,9 @@ public class SendNew extends  AsyncTask<Object, Object, Object>{
 	@Override
 	protected Object doInBackground(Object... params) {
 		client = new Socket();
+		GetAddress ga = new GetAddress();
 		try {
-			SocketAddress remoteAddr = new InetSocketAddress("192.168.100.6", 55555);
+			SocketAddress remoteAddr = new InetSocketAddress(ga.server(), ga.serverPort());
 			client.connect(remoteAddr, 8000);
 		} catch (SocketTimeoutException e) {
 			try {
@@ -71,6 +75,7 @@ public class SendNew extends  AsyncTask<Object, Object, Object>{
 		
 		DataOutputStream out;
 		try {
+			//Sending the new member information to the server
 			out = new DataOutputStream(client.getOutputStream());
 			out.writeInt(APP);
 			out.writeInt(ADDLIST);
@@ -79,6 +84,7 @@ public class SendNew extends  AsyncTask<Object, Object, Object>{
 			out.writeUTF(groupStr);
 			out.writeUTF(actionStr);
 			
+			//Image sent as byte array in PNG compressed format
 			ByteArrayOutputStream stream = new ByteArrayOutputStream();
 			photo.compress(Bitmap.CompressFormat.PNG, 100, stream);
 			byte[] photoByteArray = stream.toByteArray();
@@ -91,6 +97,7 @@ public class SendNew extends  AsyncTask<Object, Object, Object>{
 			cancel(isCancelled());
 		}
 		
+		//Retrieves a boolean for whether the new member was accepted or not.
 		DataInputStream in;
 		try {
 			in = new DataInputStream(client.getInputStream());
@@ -105,14 +112,21 @@ public class SendNew extends  AsyncTask<Object, Object, Object>{
 		return null;
 	}
 	
+	
 	@Override
 	protected void onPostExecute(Object result) {
 		super.onPostExecute(result);
 		if (accepted) {
+			//Once the new member has been added then reload the list activity to get the updated list as the list is not stored on the phone
 			addNewToList.startActivity(new Intent(addNewToList.getApplicationContext(), MyLists.class));
 			addNewToList.finish();
 		}
 		else {
+			/*
+			 * The server detects faces on the given photo and if none detected then it returns a false value so that 
+			 * the user can then take the photo again
+			 */
+			
 			addNewToList.errorText.setText("No faces detected in photo. Try again.");
 		}
 		resetVis();

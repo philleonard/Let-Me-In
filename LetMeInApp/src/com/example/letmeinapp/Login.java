@@ -10,7 +10,6 @@ import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.SocketTimeoutException;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -21,6 +20,11 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+/*
+ * Login class sends login details and waits for a result from the server as wether the user
+ * has successfully logged in or not. If not the server sends back details on what was wrong
+ * (username doesn't exist, wrong password etc..)
+ */
 public class Login extends AsyncTask<Object, Object, Object>{
 	
 	final int APP = 1;
@@ -53,13 +57,14 @@ public class Login extends AsyncTask<Object, Object, Object>{
 		this.remember = remember;
 	}
 	
+	//Creates sockets and data streams, sending and receiving login data to and from the server
 	@Override
 	protected Object doInBackground(Object... arg0) {
 		
 		client = new Socket();
-		
+		GetAddress ga = new GetAddress();
 		try {
-			SocketAddress remoteAddr = new InetSocketAddress("192.168.100.6", 55555);
+			SocketAddress remoteAddr = new InetSocketAddress(ga.server(), ga.serverPort());
 			client.connect(remoteAddr, 8000);
 		} catch (SocketTimeoutException e) {
 			try {
@@ -105,6 +110,8 @@ public class Login extends AsyncTask<Object, Object, Object>{
 			cancelReason = 6;
 			cancel(isCancelled());
 		}
+		
+		//If the login response is greater than 0 then if was a failed login
 		System.out.println("Response code is: " + loginResponse);
 		if (loginResponse == 1) {
 			cancelReason = 7;
@@ -124,6 +131,7 @@ public class Login extends AsyncTask<Object, Object, Object>{
 		return null;
 	}
 	
+	//If it gets to here then login was successful, so main activity is launched.
 	@Override
 	protected void onPostExecute(Object result) {
 		super.onPostExecute(result);
@@ -136,6 +144,11 @@ public class Login extends AsyncTask<Object, Object, Object>{
 		main.finish();
 	}
 	
+	
+	/*
+	 * If the login proceduce was cancelled then this method handles why and gives 
+	 * the user necessary information on the matter
+	 */
 	@Override
 	protected void onCancelled() {
 		try {

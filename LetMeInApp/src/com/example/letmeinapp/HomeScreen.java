@@ -2,8 +2,6 @@ package com.example.letmeinapp;
 /**
  * @author Philip Leonard
  */
-import com.example.letmeinapp.R;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,6 +11,10 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
+/*
+ * This class is launched when the user logs in. It starts to listen for notifications from the server and it also
+ * allows the user to navigate to the rest of the application
+ */
 public class HomeScreen extends Activity {
 	
 		private SharedPreferences settings;
@@ -33,6 +35,7 @@ public class HomeScreen extends Activity {
 			setUser(userText);
 			signoutButton.setOnClickListener(new OnClickListener() {
 				
+				//Sign out button returns to the login screen
 				@Override
 				public void onClick(View v) {
 					startActivity(new Intent(getApplicationContext(), Main.class));
@@ -42,6 +45,7 @@ public class HomeScreen extends Activity {
 			
 			myDoorButton.setOnClickListener(new OnClickListener() {
 				
+				//My door button starts the my door activity which retrieves displays the webcam image of the client.
 				@Override
 				public void onClick(View v) {
 					startActivity(new Intent(getApplicationContext(), MyDoor.class));
@@ -50,6 +54,7 @@ public class HomeScreen extends Activity {
 			
 			myListsButton.setOnClickListener(new OnClickListener() {
 				
+				//My lists button launches the my lists activity which displays the users permitted people
 				@Override
 				public void onClick(View v) {
 					startActivity(new Intent(getApplicationContext(), MyLists.class));
@@ -59,6 +64,7 @@ public class HomeScreen extends Activity {
 
 		@Override
 		public void onBackPressed() {
+			//Back pressed also signs out of the application and returns to the login screen
 			super.onBackPressed();
 			startActivity(new Intent(getApplicationContext(), Main.class));
 			finish();

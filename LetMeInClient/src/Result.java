@@ -9,6 +9,11 @@ import java.net.Socket;
  */
 public class Result implements Runnable {
 
+	/*
+	 * This thread listens for a result from the server after the images have been sent for identification.
+	 * The two results are to keep the door closed or to open it.
+	 */
+	
 	ClientHome clientHome;
 	public Result(ClientHome clientHome) {
 		this.clientHome = clientHome;
@@ -23,7 +28,6 @@ public class Result implements Runnable {
 		try {
 			listen  = new ServerSocket(55555);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -31,32 +35,44 @@ public class Result implements Runnable {
 		try {
 			getResult = listen.accept();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+		try {
+			listen.close();
+		} catch (IOException e1) {
+			e1.printStackTrace();
 		}
 		
 		DataInputStream in = null;
 		try {
 			in = new DataInputStream(getResult.getInputStream());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+		clientHome.getConsole().append(clientHome.console() + "Reading data from server.. \n");
 		String[] nameArray;
 		try {
 			int size = in.readInt();
 			String action = in.readUTF(); //open or phone
 			nameArray = new String[size];
 			
+			String phoneOnline = "";
+			phoneOnline = in.readUTF();
+			
+			//Receives the names of the people at the door
 			String nameDisplay = "Recognised: ";
 			for (int f = 0; f < size; f++) {
-				nameDisplay = nameDisplay + in.readUTF() + ", ";
+				if (f == size)
+					nameDisplay = nameDisplay + in.readUTF() + ".";
+				else
+					nameDisplay = nameDisplay + in.readUTF() + ", ";
 			}
+
 			clientHome.getConsole().append(clientHome.console() + nameDisplay + "\n");
 			
 			clientHome.getFacesText().setText(nameDisplay);
 			
+			//If the received action is to open the door, then display so and then open the door
 			if (action.equals("open")) {
 				clientHome.getConsole().append(clientHome.console() + "Opening the door... \n");
 				clientHome.getActionText().setForeground(Color.GREEN);
@@ -69,19 +85,27 @@ public class Result implements Runnable {
 				clientHome.getConsole().append(clientHome.console() + "Door has been closed \n");
 			}
 			
+			//If the received action is that the phone is going to respond then wait for a response from the phone
 			else if (action.equals("phone")) {
-				clientHome.getConsole().append(clientHome.console() + "Server found face with 'notify me'. Waiting for phone & server response. \n");
-				clientHome.getActionText().setText("STATUS: WAITING FOR RESPONSE ON PHONE...");
-				Thread phoneResponse = new Thread(new PhoneResponse());
-				phoneResponse.start();
-				phoneResponse.join();
+				if (phoneOnline.equals("online")) {
+					clientHome.getConsole().append(clientHome.console() + "Server found face with 'notify me'. Waiting for phone & server response. \n");
+					clientHome.getActionText().setText("STATUS: WAITING FOR RESPONSE ON PHONE...");
+					Thread phoneResponse = new Thread(new PhoneResponse(clientHome));
+					phoneResponse.start();
+					phoneResponse.join();
+				} 
+				else {
+					clientHome.getConsole().append(clientHome.console() + "Phone offline so no response. Keeping door closed\n");
+				}
 			}
-					
+			try {
+				getResult.close();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}		
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

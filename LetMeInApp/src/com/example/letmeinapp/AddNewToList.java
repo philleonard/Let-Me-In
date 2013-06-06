@@ -5,13 +5,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.media.FaceDetector;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,6 +20,10 @@ import android.widget.TextView;
  * @author Philip Leonard
  */
 
+/*AddNewToList activity allows user to add another profile to their list.
+ *The takes the photo of the person and then fills out their name in a form
+ *and the group they belong to and the default action. 
+ */
 public class AddNewToList extends Activity {
 	protected static final int CAMERA_REQUEST = 1888;
 	ImageView photoTaken;
@@ -44,6 +45,7 @@ public class AddNewToList extends Activity {
 		Button takePhoto = (Button) findViewById(R.id.takePhoto);
 		takePhoto.setOnClickListener(new OnClickListener() {
 			
+			//Pressing the button starts the camera activity in order to take a photo of the person
 			@Override
 			public void onClick(View v) {
 				  Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE); 
@@ -70,6 +72,7 @@ public class AddNewToList extends Activity {
 		addNew = (Button) findViewById(R.id.addNewButton);
 		addNew.setOnClickListener(new OnClickListener() {
 			
+			//Submits the info by starting an AsyncTask thread, providing the fields are all filled out.
 			@Override
 			public void onClick(View v) {
 				errorText.setText("");

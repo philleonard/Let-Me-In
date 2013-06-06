@@ -11,6 +11,11 @@ import java.net.SocketTimeoutException;
 
 public class ClientLogin extends Thread{
 	
+	/*
+	 * This thread manages logging into an account, the user entered username and password are passed here
+	 * and are uploaded to the server, which gives a response as to whether they are correct.
+	 */
+	
 	final int CLIENT = 0;
 	final int LOGIN = 0;
 	final int REGISTER = 1;
@@ -30,8 +35,9 @@ public class ClientLogin extends Thread{
 		
 		client = new Socket();
 		
+		//Connecting to the server
 		try {
-			SocketAddress remoteAddr = new InetSocketAddress("192.168.100.6", 55555);
+			SocketAddress remoteAddr = new InetSocketAddress("192.168.1.178", 55555);
 			client.connect(remoteAddr, 8000);
 		} catch (SocketTimeoutException e) {
 			closeSocket();
@@ -47,6 +53,7 @@ public class ClientLogin extends Thread{
 			return;
 		}
 		
+		//Writing login details
 		DataOutputStream out;
 		try {
 			out = new DataOutputStream(client.getOutputStream());
@@ -73,6 +80,7 @@ public class ClientLogin extends Thread{
 			return;
 		}
 		
+		//Receive response code
 		int loginResponse = 0;
 		try {
 			loginResponse = in.readInt();
@@ -86,6 +94,7 @@ public class ClientLogin extends Thread{
 		
 		closeSocket();
 		
+		//Response code handling 
 		if (loginResponse == 1) {
 			clientMain.getLoginError().setText("User " + uname + " not found");
 			resetVis();

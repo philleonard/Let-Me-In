@@ -12,6 +12,10 @@ import java.net.SocketTimeoutException;
 
 public class ClientSignup extends Thread{
 	
+	/*
+	 * Thread for uploading signup details for a new account. The server responds as to whether
+	 * the new account has been accepted (and created) or not.
+	 */
 	final int CLIENT = 0;
 	final int LOGIN = 0;
 	final int REGISTER = 1;
@@ -21,6 +25,8 @@ public class ClientSignup extends Thread{
 	String email;
 	int signupResponse = 0;
 	Socket client;
+	
+	//Username, password and email all required
 	public ClientSignup(String uname, String pass, String email, ClientMain clientMain) {
 		this.uname = uname;
 		this.pass = pass;
@@ -34,6 +40,7 @@ public class ClientSignup extends Thread{
 		clientMain.getSignupError().setText("");
 		client = new Socket();
 		
+		//Connection to server
 		try {
 			SocketAddress remoteAddr = new InetSocketAddress("192.168.1.178", 8080);
 			client.connect(remoteAddr, 8000);
@@ -51,6 +58,7 @@ public class ClientSignup extends Thread{
 			return;
 		}
 		
+		//Writing signup details
 		DataOutputStream out;
 		try {
 			out = new DataOutputStream(client.getOutputStream());
@@ -78,7 +86,7 @@ public class ClientSignup extends Thread{
 			return;
 		}
 		
-		
+		//Reading response from server
 		try {
 			signupResponse = in.readInt();
 		} catch (IOException e) {
@@ -91,6 +99,7 @@ public class ClientSignup extends Thread{
 		
 		closeSocket();
 		
+		//Handing response
 		if (signupResponse == 1) {
 			clientMain.getSignupError().setText("Username is already in use");
 			resetVis();
@@ -107,6 +116,7 @@ public class ClientSignup extends Thread{
 			return;
 		}
 		
+		//Reseting forms in clientMain GUI
 		clientMain.getNewUsername().setText("");
 		clientMain.getNewPassword().setText("");
 		clientMain.getNewPasswordConf().setText("");

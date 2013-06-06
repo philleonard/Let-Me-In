@@ -56,6 +56,10 @@ import javax.swing.JSeparator;
 
 public class ClientHome extends JFrame implements ActionListener, WindowListener, MouseListener {
 	
+	/*
+	 * GUI class for the main GUI auto-generated using WindowBuilder Pro
+	 */
+	
 	String VERSIONCODE = "1.0";
 	private JPanel contentPane;
 	JPanel panel, panel_4, panel_5, panel_6, panel_7, panel_8, panel_9;
@@ -70,7 +74,6 @@ public class ClientHome extends JFrame implements ActionListener, WindowListener
 	private BufferedImage faceImage5;
 	private BufferedImage faceImage6;
 	private JLabel lblUsername;
-	private JLabel lblCpuUsage;
 	private JLabel lblMemoryUsage;
 	private JLabel lblThreads;
 	private JLabel lblUptime;
@@ -78,6 +81,7 @@ public class ClientHome extends JFrame implements ActionListener, WindowListener
 	private JLabel actionText;
 	private TextArea console;
 	
+	//Auto-generated GUI code
 	public ClientHome(final String uname) {
 		super("Let Me In Client Control");
 		this.uname = uname;
@@ -104,9 +108,9 @@ public class ClientHome extends JFrame implements ActionListener, WindowListener
 		contentPane.add(panel_1, gbc_panel_1);
 		GridBagLayout gbl_panel_1 = new GridBagLayout();
 		gbl_panel_1.columnWidths = new int[]{0, 0, 0, 0, 0, 0, 0};
-		gbl_panel_1.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+		gbl_panel_1.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 20, 0, 0, 0};
 		gbl_panel_1.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-		gbl_panel_1.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_panel_1.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		panel_1.setLayout(gbl_panel_1);
 		
 		lblUsername = new JLabel("Signed in as: ");
@@ -128,16 +132,6 @@ public class ClientHome extends JFrame implements ActionListener, WindowListener
 		gbc_lblUptime.gridy = 1;
 		panel_1.add(lblUptime, gbc_lblUptime);
 		
-		lblCpuUsage = new JLabel("CPU usage:");
-		lblCpuUsage.setFont(new Font("Calibri", Font.PLAIN, 13));
-		lblCpuUsage.setHorizontalAlignment(SwingConstants.LEFT);
-		GridBagConstraints gbc_lblCpuUsage = new GridBagConstraints();
-		gbc_lblCpuUsage.anchor = GridBagConstraints.WEST;
-		gbc_lblCpuUsage.insets = new Insets(0, 0, 5, 5);
-		gbc_lblCpuUsage.gridx = 0;
-		gbc_lblCpuUsage.gridy = 2;
-		panel_1.add(lblCpuUsage, gbc_lblCpuUsage);
-		
 		lblMemoryUsage = new JLabel("Memory usage:");
 		lblMemoryUsage.setFont(new Font("Calibri", Font.PLAIN, 13));
 		lblMemoryUsage.setHorizontalAlignment(SwingConstants.LEFT);
@@ -145,7 +139,7 @@ public class ClientHome extends JFrame implements ActionListener, WindowListener
 		gbc_lblMemoryUsage.anchor = GridBagConstraints.WEST;
 		gbc_lblMemoryUsage.insets = new Insets(0, 0, 5, 5);
 		gbc_lblMemoryUsage.gridx = 0;
-		gbc_lblMemoryUsage.gridy = 3;
+		gbc_lblMemoryUsage.gridy = 2;
 		panel_1.add(lblMemoryUsage, gbc_lblMemoryUsage);
 		
 		lblThreads = new JLabel("Threads: ");
@@ -154,7 +148,7 @@ public class ClientHome extends JFrame implements ActionListener, WindowListener
 		gbc_lblThreads.insets = new Insets(0, 0, 5, 5);
 		gbc_lblThreads.anchor = GridBagConstraints.WEST;
 		gbc_lblThreads.gridx = 0;
-		gbc_lblThreads.gridy = 4;
+		gbc_lblThreads.gridy = 3;
 		panel_1.add(lblThreads, gbc_lblThreads);
 		
 		setFacesText(new JLabel("Recognised: "));
@@ -162,7 +156,7 @@ public class ClientHome extends JFrame implements ActionListener, WindowListener
 		gbc_facesText.anchor = GridBagConstraints.WEST;
 		gbc_facesText.insets = new Insets(0, 0, 5, 5);
 		gbc_facesText.gridx = 0;
-		gbc_facesText.gridy = 7;
+		gbc_facesText.gridy = 6;
 		panel_1.add(getFacesText(), gbc_facesText);
 		
 		setActionText(new JLabel("STATUS: DOOR CLOSED"));
@@ -170,7 +164,7 @@ public class ClientHome extends JFrame implements ActionListener, WindowListener
 		GridBagConstraints gbc_actionText = new GridBagConstraints();
 		gbc_actionText.insets = new Insets(0, 0, 0, 5);
 		gbc_actionText.gridx = 0;
-		gbc_actionText.gridy = 8;
+		gbc_actionText.gridy = 9;
 		panel_1.add(getActionText(), gbc_actionText);
 		
 		panel = new panel(this);
@@ -268,6 +262,7 @@ public class ClientHome extends JFrame implements ActionListener, WindowListener
         
         new Timer().schedule(new TimerTask() {
 
+        	//Thread for retrieving information about the programs performance. 
 			@Override
 			public void run() {
 				
@@ -279,16 +274,15 @@ public class ClientHome extends JFrame implements ActionListener, WindowListener
 				osmx.getSystemLoadAverage();
 				long uptimens = rmx.getUptime();
 				
-				
 				lblUsername.setText("Signed in as: " + uname);
 				lblUptime.setText("Uptime: " + calcTime(uptimens));
 				lblMemoryUsage.setText("Memory usage: " + (mmx.getHeapMemoryUsage().getUsed()/1024)/1024 + "Mb");
 				lblThreads.setText("Threads: " + tmx.getThreadCount());
-				//lblCpuUsage.setText("CPU usage: " + osmx.getSystemLoadAverage());
 				
 			
 			}
 
+			//Method for calculating up-time
 			private String calcTime(long uptimens) {
 				int x = (int) (uptimens / 1000);
 				
@@ -338,6 +332,7 @@ public class ClientHome extends JFrame implements ActionListener, WindowListener
 	}
 
 
+	//System tray icon
 	private void sysTray() {
 
 		final PopupMenu popup = new PopupMenu();
@@ -365,6 +360,7 @@ public class ClientHome extends JFrame implements ActionListener, WindowListener
 		
 	}
 	
+	//Tray icon buttons
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String action = e.getActionCommand();
@@ -377,6 +373,7 @@ public class ClientHome extends JFrame implements ActionListener, WindowListener
 	
 	}
 
+	//Getters and setters for GUI in other threads and classes
 	public JPanel getpanel() {
 		return panel;
 	}
@@ -389,8 +386,6 @@ public class ClientHome extends JFrame implements ActionListener, WindowListener
 		this.clientLive = clientLive;
 		panel.repaint();
 	}
-	
-	
 	
 	public BufferedImage getFace1() {
 		return faceImage1;
@@ -546,6 +541,7 @@ public class ClientHome extends JFrame implements ActionListener, WindowListener
 
 	public void setActionText(JLabel actionText) {
 		this.actionText = actionText;
+		actionText.setFont(new Font("Tahoma", Font.PLAIN, 17));
 	}
 
 	public JLabel getFacesText() {
@@ -565,7 +561,7 @@ public class ClientHome extends JFrame implements ActionListener, WindowListener
 	}
 }
 
-
+//JPanel for displaying faces detected in image 
 class facePanel extends JPanel {
 	ClientHome clientHome;
 	BufferedImage faceImage;
@@ -604,6 +600,7 @@ class facePanel extends JPanel {
 	}
 }
 
+//JPanel for displaying the live image
 class panel extends JPanel {
 	
 	ClientHome clientHome;

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 import android.os.AsyncTask;
 
+//MakeChanges AsyncTask thread for saving the changed details of the users list
 public class MakeChanges extends AsyncTask<Object, Object, Object>{
 	ArrayList<Item> itemList;
 	
@@ -24,13 +25,14 @@ public class MakeChanges extends AsyncTask<Object, Object, Object>{
 
 	Socket client;
 	
+	//Connecting to server and sending data
 	@Override
 	protected Object doInBackground(Object... params) {
 		
 		client = new Socket();
-		
+		GetAddress ga = new GetAddress();
 		try {
-			SocketAddress remoteAddr = new InetSocketAddress("192.168.100.6", 55555);
+			SocketAddress remoteAddr = new InetSocketAddress(ga.server(), ga.serverPort());
 			client.connect(remoteAddr, 8000);
 		} catch (SocketTimeoutException e) {
 			try {
@@ -55,6 +57,7 @@ public class MakeChanges extends AsyncTask<Object, Object, Object>{
 			cancel(isCancelled());
 		}
 		
+		//Sends the name, action and group to the server which saves the details to the database
 		for (int i = 0; i < itemList.size(); i++) {
 			Item thisRow = itemList.get(i);
 			try {

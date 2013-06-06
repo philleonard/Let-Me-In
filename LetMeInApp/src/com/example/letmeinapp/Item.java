@@ -2,10 +2,9 @@ package com.example.letmeinapp;
 /**
  * @author Philip Leonard
  */
-import java.awt.image.BufferedImage;
-
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
+
+//Class for defining the structure of an Item in the list in "MyLists"
 
 public class Item {
 	private Bitmap face;

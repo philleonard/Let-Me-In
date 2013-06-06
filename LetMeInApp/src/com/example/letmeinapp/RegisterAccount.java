@@ -9,7 +9,6 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
 
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.view.View;
 import android.widget.Button;
@@ -17,6 +16,10 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+/*
+ * This Async Task uploads the sign up information to the server. It then waits for the server to
+ * respond either successful or unsuccessful (including a reason for error catching & handling).
+ */
 public class RegisterAccount extends AsyncTask<Object, Object, Object> {
 	
 	final int APP = 1;
@@ -46,9 +49,9 @@ public class RegisterAccount extends AsyncTask<Object, Object, Object> {
 	protected Object doInBackground(Object... params) {
 
 		client = new Socket();
-		
+		GetAddress ga = new GetAddress();
 		try {
-			SocketAddress remoteAddr = new InetSocketAddress("192.168.1.178", 55555);
+			SocketAddress remoteAddr = new InetSocketAddress(ga.server(), ga.serverPort());
 			client.connect(remoteAddr, 8000);
 		} catch (Exception e) {
 			try {
@@ -98,6 +101,11 @@ public class RegisterAccount extends AsyncTask<Object, Object, Object> {
 		return signupResponse;
 	}
 	
+	/*
+	 * If the doInBackground method returns then it starts this method, so the sign up has been successful
+	 * and the app then returns to the login screen so that the user can sign in with their new account.
+	 */
+	
 	@Override
 	protected void onPostExecute(Object result) {
 		super.onPostExecute(result);
@@ -117,6 +125,8 @@ public class RegisterAccount extends AsyncTask<Object, Object, Object> {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		//Error handling, displaying to the user why the sign up failed so that they can make adjustments to the information
 		if (cancelReason == 1)
 			errorText.setText("Connection timeout...");
 		if (cancelReason > 1)

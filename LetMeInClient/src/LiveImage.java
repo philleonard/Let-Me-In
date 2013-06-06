@@ -9,6 +9,10 @@ import com.googlecode.javacv.cpp.opencv_core.IplImage;
 
 public class LiveImage implements Runnable {
 
+	/*
+	 * LiveImage thread takes image from webcam input and sets it on the GUI every 0.1 seconds
+	 */
+	
 	static ClientHome clientHome;
 	static FrameGrabber grab;
 	

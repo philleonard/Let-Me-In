@@ -2,13 +2,11 @@ package com.example.letmeinapp;
 /**
  * @author Philip Leonard
  */
-import java.awt.image.BufferedImage;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
-import java.net.SocketException;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -18,13 +16,18 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-public class RetreiveImage extends AsyncTask<Object, Object, Object> {
+/*
+ * This retrieve image class downloads the webcam image directly from the client to show any activity at the users front door
+ * at any time. By downloading the data straight from the client, it avoids overloading the server if many users where using this 
+ * feature at the same time.
+ */
+public class RetrieveImage extends AsyncTask<Object, Object, Object> {
 	
 	ImageView webcamImage;
 	ProgressBar load;
 	TextView timeout;
 	
-	RetreiveImage(ImageView webcamImage, ProgressBar load, TextView timeout) {
+	RetrieveImage(ImageView webcamImage, ProgressBar load, TextView timeout) {
 		super();
 		this.webcamImage = webcamImage;
 		this.load = load;
@@ -35,10 +38,10 @@ public class RetreiveImage extends AsyncTask<Object, Object, Object> {
 	protected Bitmap doInBackground(Object... arg0) {
 		
     	Socket client = new Socket();
-		BufferedImage webcamPhoto = null;
-		
+
+		GetAddress ga = new GetAddress();
 		try {
-			SocketAddress remoteAddr = new InetSocketAddress("192.168.1.73", 8100);
+			SocketAddress remoteAddr = new InetSocketAddress(ga.client(), ga.clientPort());
 			client.connect(remoteAddr , 5000);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -64,6 +67,8 @@ public class RetreiveImage extends AsyncTask<Object, Object, Object> {
 		Bitmap bm = (Bitmap) result;
 		load.setVisibility(View.INVISIBLE);
 		timeout.setVisibility(View.INVISIBLE);
+		
+		//Setting the image view to the retrieved image
         webcamImage.setImageBitmap(bm);
 	}
 	

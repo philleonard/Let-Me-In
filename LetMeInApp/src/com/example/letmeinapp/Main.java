@@ -3,7 +3,6 @@ package com.example.letmeinapp;
  * @author Philip Leonard
  */
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -14,9 +13,13 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.RadioButton;
 import android.widget.TextView;
 
+/*
+ * The Main activity is the first activity which is lauched
+ * It provides the user with a login form for and an option to sign
+ * up for an account if they do not have one. 
+ */
 public class Main extends Activity {
 	
 	private SharedPreferences settings;
@@ -42,6 +45,7 @@ public class Main extends Activity {
 		
 		loginButton.setOnClickListener(new OnClickListener() {
 			
+			//Login button pressed
 			@Override
 			public void onClick(View v) {
 				if (username.getText().toString().equals("") && password.getText().toString().equals(""))
@@ -64,12 +68,14 @@ public class Main extends Activity {
 					else
 						save("","");
 					
+					//Launches an AsyncTask thread (a thread which can run and influence the GUI without crashing the application
 					AsyncTask<Object, Object, Object> li = new Login(uname, pass, error, loginProgress, loginButton, username, password, signUpButton, remember, Main.this).execute();
 				}
 
 			}
 		});
 		
+		//Sign up button starts the sign up activity
 		signUpButton.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -80,6 +86,7 @@ public class Main extends Activity {
 		});
 	}
 	
+	//Saving (remembering) username and password
 	private void save(String uname, String pass) {
 		settings = getSharedPreferences("settings", MODE_WORLD_READABLE);
 		SharedPreferences.Editor editor = settings.edit();
@@ -88,6 +95,7 @@ public class Main extends Activity {
 		editor.commit();	
 	}
 	
+	//Loading pre-saved username and password
 	private void loadSaved(EditText username, EditText password) {
 		settings = getSharedPreferences("settings", MODE_WORLD_READABLE);
 		String user = null;

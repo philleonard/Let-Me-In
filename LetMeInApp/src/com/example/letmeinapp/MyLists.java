@@ -3,24 +3,23 @@ package com.example.letmeinapp;
  * @author Philip Leonard
  */
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
-
-import com.example.letmeinapp.R;
 
 import android.app.Activity;
-import android.app.LauncherActivity.ListItem;
-import android.app.ListActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
+/*
+ * The my lists activity retrieves and displays the list of people who the user has configured to allow
+ * disallow or notify about when they are at the door (monitored by the client). This class also allows the addition
+ * and deletion of members from the list. 
+ */
 public class MyLists extends Activity {
 	
 	ArrayList<Item> itemList;
@@ -44,6 +43,7 @@ public class MyLists extends Activity {
 		addNew.setVisibility(View.INVISIBLE);
 		addNew.setOnClickListener(new OnClickListener() {
 			
+			//Button which launches the add new function of the application to allow the user to add a new member to the list from their phone
 			@Override
 			public void onClick(View v) {
 				startActivity(new Intent(getApplicationContext(), AddNewToList.class));
@@ -56,6 +56,7 @@ public class MyLists extends Activity {
 		saveButton.setVisibility(View.INVISIBLE);
 		saveButton.setOnClickListener(new OnClickListener() {
 			
+			//Save button uploads changes to the list to the server (lists are not stored on the phone).
 			@Override
 			public void onClick(View v) {
 				AsyncTask<Object, Object, Object> mc = new MakeChanges(itemList, loadSaved()).execute();			
