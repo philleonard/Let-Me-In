@@ -14,6 +14,31 @@ import javax.imageio.ImageIO;
  * 
  * @author James
  *
+ *This static class is called from ServerConnections whenever data needs to manipulated 
+ *in the database. This class controls all the connections to the database.
+ *
+ *To set of a database that works with this project, it has to be of the following type:
+ *Address: localhost Port: 1337
+ *Database name: facerecsch
+ *Username: root
+ *Password: root
+ *
+ *Schema
+ *users table:
+ *userid			Int				PK, NN, AI
+ *username			VarChar(45)		PK, NN
+ *password			VarChar(45)		NN
+ *clientip			VarChar(16)
+ *phoneip			VarChar(16)	
+ *email				VarChar(45)		PK, NN
+ *
+ *photos table: 
+ *userid			Int				PK, NN
+ *photoid			Int				PK, NN, AI
+ *personname		VarChar(45)		
+ *location			VarChar(45)		PK, NN
+ *defaultaction		VarChar(10)
+ *persongroup		VarChar(15)
  */
 
 
@@ -22,8 +47,9 @@ public class SQLConnections implements Serializable{
 	private static ResultSet rs = null;
 	private static PreparedStatement ps = null;
 
+	
+	//This method is called in every method as it all the details to connect to the db
 	private static Connection connect(){
-		//System.out.println("MySQL Connect Example.");
 		Connection conn = null;
 		String url = "jdbc:mysql://localhost:1337/";
 		String dbName = "facerecsch";
@@ -34,7 +60,7 @@ public class SQLConnections implements Serializable{
 		try {
 			Class.forName(driver).newInstance();
 			conn = DriverManager.getConnection(url+dbName,userName,password);
-			//System.out.println("Connected to the database");
+			System.out.println("Connected to the database");
 			return conn;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -42,7 +68,8 @@ public class SQLConnections implements Serializable{
 		}
 
 	}
-
+	
+	//This method is called at the end of every method as the closes the connections and statements
 	private static void disconnect(Connection connect) {
 		try {
 			if (rs != null) {
@@ -64,7 +91,11 @@ public class SQLConnections implements Serializable{
 	}
 	
 	
-
+	/*
+	This method is used to get all the photos for a perticular user.
+	The method is sent the user's id and the number of photos that belongs to them
+	The number of photos they have is retreived in another method.
+	*/
 	public static PictureData[] getPhotos(String userID, int noOfPhotos){
 		PictureData[] allPicData = new PictureData[noOfPhotos];
 		int i = 0;
@@ -100,6 +131,8 @@ public class SQLConnections implements Serializable{
 		return allPicData;
 	}
 	
+	
+	//This method is used to get the IP of the user's mobile phone from the data base
 	public static String getPhoneIP(String userID){
 		String phoneIP = null;
 		Connection conn = connect();
@@ -115,15 +148,45 @@ public class SQLConnections implements Serializable{
 					phoneIP = rs.getString("phoneip");
 					System.out.println("Phone IP of user " + userID + " is " + phoneIP);
 				}
-			} catch (SQLException e ) {} 
+			} catch (SQLException e ) {
+				e.printStackTrace();
+			} 
 		}
 		disconnect(conn);
-		
-		
 		return phoneIP;
-		
+	}
+	
+	/*
+	This method is used to get the IP of the user's computer that has the client
+	running on it, from the data base
+	*/
+	public static String getClientIP(String userID){
+		String clientIP = null;
+		Connection conn = connect();
+		if (conn == null) {
+			System.out.println("NULL");
+		}
+		else {
+			String query = "SELECT clientip FROM users WHERE userid = \"" + userID + "\"";
+			try {
+				statement = conn.createStatement();
+				rs = statement.executeQuery(query);
+				while (rs.next()) {
+					clientIP = rs.getString("clientip");
+					System.out.println("Client IP of user " + userID + " is " + clientIP);
+				}
+			} catch (SQLException e ) {
+				e.printStackTrace();
+			} 
+		}
+		disconnect(conn);
+		return clientIP;
 	}
 
+	/*
+	This method is used to get the number of photos that belong to a user. As this number is
+	used quite a lot, it has its own method for this.
+	*/
 	public static int getNoPhotos(String userID){
 		String noOfPhotos = "0";
 		Connection conn = connect();
@@ -139,12 +202,19 @@ public class SQLConnections implements Serializable{
 					noOfPhotos = rs.getString("COUNT(*)");
 					System.out.println(noOfPhotos + " photos belong to user with ID: " + userID);
 				}
-			} catch (SQLException e ) {} 
+			} catch (SQLException e ) {
+				e.printStackTrace();
+			} 
 		}
 		disconnect(conn);
 		return Integer.parseInt(noOfPhotos);
 	}
 
+	/*
+	This method is used to get the userid of a user from their username. This is because a user 
+	only knows there username and the userid is just something used in the database for determining
+	who each photo belongs to.
+	*/
 	public static String getIDFromUsername(String username){
 		Connection conn = connect();
 		String userid = null;
@@ -160,60 +230,19 @@ public class SQLConnections implements Serializable{
 					userid = rs.getString("userid");
 					System.out.println("Username: " + username + " ID is: " + userid);
 				}
-			} catch (SQLException e ) {} 
+			} catch (SQLException e ) {
+				e.printStackTrace();
+			} 
 		}
 		disconnect(conn);
 		return userid;
 	}
 
-	public static String getPicNameFromId(int picID){
-		System.out.println("PICID to Identify: " + picID);
-		String picName = null;
-		Connection conn = connect();
-		if (conn == null) {
-			System.out.println("NULL");
-		}
-		else {
-			String query = "SELECT personname FROM photos WHERE photoid = \""+picID+"\"";
-			try {
-				statement = conn.createStatement();
-				rs = statement.executeQuery(query);
-				while (rs.next()) {
-					picName = rs.getString("personname");
-					System.out.println(picName);
-				}
-			} catch (SQLException e ) {} 
-
-		}
-		disconnect(conn);
-		return picName;
-	}
 	
-	public static boolean getNotify(int picID){
-		boolean notify = false;
-		Connection conn = connect();
-		if (conn == null) {
-			System.out.println("NULL");
-		}
-		else {
-			String query = "SELECT defaultaction FROM photos WHERE photoid = \""+picID+"\"";
-			try {
-				statement = conn.createStatement();
-				rs = statement.executeQuery(query);
-				while (rs.next()) {
-					if (rs.getString("defaultaction").equals("Notify me")){
-						notify = true;
-					}
-				}
-			} catch (SQLException e ) {} 
-
-		}
-		disconnect(conn);
-		return notify;
-	}
-
 	
 
+	
+	//This method is used to add a new picture to a user's account
 	public static void addPicture(String userID, String name, String defAct, String group, BufferedImage newPhoto) {
 		Connection conn = connect();
 		if (conn == null) {
@@ -221,6 +250,10 @@ public class SQLConnections implements Serializable{
 		}
 		else {
 			try {
+				//Here all the details of the photo are added to the db
+				//except for the location as the photo has not been saved yet.
+				//This is done first though as the name of the file must be the photoid,
+				//but this is auto-generated when you add the entry to the db.
 				ps = conn.prepareStatement("INSERT into photos (userid, personname, location, defaultaction, persongroup) VALUES (?, ?, ?, ?, ?)");
 				ps.setString(1, userID);
 				ps.setString(2, name);
@@ -231,6 +264,7 @@ public class SQLConnections implements Serializable{
 				ps.executeBatch();
 				System.out.println("Photo Added");
 				
+				//Here the photo id of the new photo is retreived.
 				String query = "SELECT photoid FROM photos WHERE personname = \""+name+"\" and userid = \"" + userID + "\"";
 			
 				statement = conn.createStatement();
@@ -240,17 +274,16 @@ public class SQLConnections implements Serializable{
 					picID = Integer.parseInt(rs.getString("photoid"));
 				}
 				 
+				//Here the file is saved with the photoid just retreived
 	            File outputfile = new File("Photos/" + userID + "/" + picID + ".bmp");
 	            ImageIO.write(newPhoto, "PNG", outputfile);
-			      
+			     
+	            //Here the db is updated to include the location of where the photo has just been saved.
 	            ps = conn.prepareStatement("UPDATE photos SET location = ? WHERE photoid = ?");
 				ps.setString(1, "Photos/" + userID + "/" + picID + ".bmp");
 				ps.setString(2, Integer.toString(picID));
 				ps.addBatch();
 				ps.executeBatch();
-				
-	            
-	            
 				
 			} catch (SQLException | IOException e ) {
 				e.printStackTrace();
@@ -259,6 +292,10 @@ public class SQLConnections implements Serializable{
 		disconnect(conn);
 	}
 
+	/*
+	This method is used to remove a photo, it first gets the images location from the db,
+	then deletes the file from storage, then updates the database.
+	*/
 	public static void removePicture(String userID, String name) {
 		Connection conn = connect();
 		if (conn == null) {
@@ -284,11 +321,19 @@ public class SQLConnections implements Serializable{
 				System.out.println("Photo Data Deleted from Database");
 
 
-			} catch (SQLException e ) {} 
+			} catch (SQLException e ) {
+				e.printStackTrace();
+			} 
 		}
 		disconnect(conn);
 	}
 	
+	/*
+	This method is used to update the photo data in the database.
+	To make it easier on the phone side, when changes are made, the phone just sends
+	back all the data, including stuff that hasn't been update. This means we update
+	all data in the database, even if nothing has changed.
+	*/
 	public static void changePhotos(String userID, PictureData[] newPicData){
 		Connection conn = connect();
 		int i = 0;
@@ -300,8 +345,9 @@ public class SQLConnections implements Serializable{
 			try {
 				statement = conn.createStatement();
 				rs = statement.executeQuery(query);
+				System.out.println("Starting to overwrite photo data");
 				while (rs.next()) {
-					ps = conn.prepareStatement("UPDATE photos SET name = ?, persongroup = ?, defaultaction = ? WHERE photoid = ?");
+					ps = conn.prepareStatement("UPDATE photos SET personname = ?, persongroup = ?, defaultaction = ? WHERE photoid = ?");
 					ps.setString(1, newPicData[i].name);
 					ps.setString(2, newPicData[i].group);
 					ps.setString(3, newPicData[i].defaultaction);
@@ -309,15 +355,25 @@ public class SQLConnections implements Serializable{
 					ps.addBatch();
 					i++;
 				}
+				System.out.println("Executing Batch");
 				ps.executeBatch();
+				System.out.println("PhotoData Updated");
 
-			} catch (SQLException e ) {} 
+
+			} catch (SQLException e ) {
+				e.printStackTrace();
+			} 
 		}
 		disconnect(conn);
 	}
-
+	
+	/*
+	This method is used to authenticate login attempts. As the user will login from both the phone
+	app and the pc client, there needs to be a way to distinguish them as there user's ip address is
+	stored in this method for later contact.
+	*/
 	public static int loginAuthentication (String username, String password, String ipAddress, int identifier){
-		//identify 0 = client, 1 = phone
+		//identify: 0 = client, 1 = phone
 		Connection conn = connect();
 		String query;
 		System.out.println("Sign In Request");
@@ -326,7 +382,6 @@ public class SQLConnections implements Serializable{
 			System.out.println("NULL");
 		}
 		else {
-
 			query = "SELECT password, phoneip, clientip FROM users WHERE username = \"" + username + "\"";
 			try {
 				statement = conn.createStatement();
@@ -361,12 +416,12 @@ public class SQLConnections implements Serializable{
 					}//endif password check
 					else {
 						result = 2;
-						System.out.println("Else result 2");
-
+						System.out.println("Incorrect Password Entered");
 					}
-				}//endif rs.next
+				}//endif rs.next/find matching username
 				else {
 					result = 1;
+					System.out.println("Username not found");
 				}
 			} catch (SQLException e ) {
 				e.printStackTrace();
@@ -378,6 +433,15 @@ public class SQLConnections implements Serializable{
 		return result;
 	}
 
+	/*
+	This method is used to signup for a new account. This method checks that the username or 
+	email address entered does not already exist
+	Result:	-1 = Initialising State
+				0 = Success
+				1 = Username already exists
+				2 = Email already exists
+				3 = Both already exist
+	*/
 	public static int signUp (String username, String password, String emailAddress){
 		Connection conn = connect();
 		String query;
@@ -392,7 +456,7 @@ public class SQLConnections implements Serializable{
 				statement = conn.createStatement();
 				rs = statement.executeQuery(query);			  
 				if(rs.next()){
-					//System.out.println("Username Exists");
+					System.out.println("Username Exists");
 					result = 1;
 				}
 
@@ -438,21 +502,68 @@ public class SQLConnections implements Serializable{
 		return result;
 	}
 
+	/*
+	This method is used to sign out of the phone app.
+	This prevents them getting notifications also.
+	*/
+	public static void signOut(String userID){
+		Connection conn = connect();
+		if (conn == null) {
+			System.out.println("NULL");
+		}
+		else {
+			try {
+				ps = conn.prepareStatement("UPDATE users SET phoneip = ? WHERE userid = ?");
+				ps.setString(1, "");
+				ps.setString(2, userID);
+				ps.addBatch();
+
+				ps.executeBatch();
+				System.out.println("User " + userID + " has signed out");
 
 
-	//test method
-	public static void main(String[] args) throws Exception{
-		//signUp("james", "bob", "tit");
-		//loginAuthentication("jamestrever", "password", "ipAddress", 0);
-		//System.out.println(getIDFromUsername("chuck"));
-		//System.out.println(getPicNameFromId(1));
-		//System.out.println(getNoPhotos(getIDFromUsername("phil")));
-		//File outputfile = new File("Photos/userid/photoID.png");
-		//getPhotos("1", 2);
-		//getPhoneIP("1");
-		getPicNameFromId(7);
+			} catch (SQLException e ) {
+				e.printStackTrace();
+			} 
+		}
+		disconnect(conn);
 	}
 
-	
+	/*
+	This method is used to get all the information about the images from their id's.
+	The method first sets the name and default action to defaults in case the person is a stranger.
+	In then finds the rest of the information.
+	*/
+	public static void getPicInfoFromID(String userID, String[] pictureIDs, int noOfPhotos, PictureData[] allPicData) {
+		for(int i = 0; i<noOfPhotos; i++){
+			allPicData[i] = new PictureData("Unidentified", "Notify me", null, null);
+		}
+		
+		
+		
+		Connection conn = connect();
+		if (conn == null) {
+			System.out.println("NULL");
+		}
+		else {
+			String query = "SELECT * FROM photos WHERE userid = \""+userID+"\"";
+			try {
+				statement = conn.createStatement();
+				rs = statement.executeQuery(query);
+				for (int i = 0; i<noOfPhotos; i++){
+					while (rs.next()) {
+						if(rs.getString("photoid").equals(pictureIDs[i])){
+							allPicData[i].name = rs.getString("personname");
+							allPicData[i].defaultaction = rs.getString("defaultaction");
+							rs.afterLast();
+						}
+					}
+					rs.beforeFirst();
+				}
+			} catch (SQLException e ) {} 
+
+		}
+		disconnect(conn);
+	}	
 
 }

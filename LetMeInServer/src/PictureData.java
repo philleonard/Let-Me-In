@@ -22,7 +22,8 @@ import java.io.Serializable;
  * (name)[num].group
  * (name)[num].img
  * 
- * 
+ * This class is used to hold the information about a picture and the picture itself. This makes it
+ * easier when sending photo information as it puts all the information together.
  */
 public class PictureData implements Serializable{
 	public String name = null;
